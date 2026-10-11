@@ -1,0 +1,15 @@
+{
+  "name": "inference-engineering",
+  "description": "Inference Engineer plugin for on-prem vLLM/SGLang serving",
+  "owner": {
+    "name": "Leonid Konchulizov",
+    "email": "mr.konchulizov@gmail.com"
+  },
+  "plugins": [
+    {
+      "name": "inference-engineer",
+      "source": ".",
+      "description": "Skills, incident subagent and Taskfile for on-prem LLM serving: runtime, tool-call parsers, perf, SLO incidents, capacity"
+    }
+  ]
+}

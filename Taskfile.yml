@@ -1,0 +1,149 @@
+# Inference Engineer: deterministic operations contract for a local vLLM / SGLang endpoint.
+# go-task v3. Every task is idempotent and exits non-zero on failure. Commands run in the
+# directory you call task from, so inference.env and .inference-state belong to the project.
+#
+# From any project:        task -t /path/to/inference-engineer/Taskfile.yml health
+# Or include in the project Taskfile.yml:
+#   includes:
+#     infer:
+#       taskfile: /path/to/inference-engineer/Taskfile.yml
+#   -> task infer:health
+#
+# Settings, highest priority first: task vars (task serve INFER_PROFILE=x), environment,
+# file inference.env in the current directory (KEY=value lines), built-in defaults.
+#   INFER_URL        OpenAI-compatible base URL, no /v1   (default http://127.0.0.1:8000)
+#   INFER_API_KEY    bearer token if the server needs one (default empty)
+#   INFER_PROFILE    profile name from profiles/           (serve, stop, logs)
+#   INFER_STATE_DIR  pid files and logs                    (default ./.inference-state)
+#   SLO_TTFT_P95_MS  bench gate, p95 time to first token   (default 2000)
+#   SLO_TPOT_P95_MS  bench gate, p95 time per output token (default 60)
+#   BENCH_N BENCH_C BENCH_IN BENCH_OUT   bench shape       (default 32 8 2048 256)
+version: '3'
+
+vars:
+  SCRIPTS: '{{.TASKFILE_DIR}}/scripts'
+  PROFILES_DIR: '{{.PROFILES_DIR | default (joinPath .TASKFILE_DIR "profiles")}}'
+
+# pass-through: empty values mean "not set", the scripts then read inference.env and defaults
+env:
+  INFER_URL: '{{.INFER_URL}}'
+  INFER_API_KEY: '{{.INFER_API_KEY}}'
+  INFER_PROFILE: '{{.INFER_PROFILE}}'
+  INFER_STATE_DIR: '{{.INFER_STATE_DIR}}'
+  INFER_ENV_FILE: '{{.INFER_ENV_FILE}}'
+  PROFILES_DIR: '{{.PROFILES_DIR}}'
+  SERVE_TIMEOUT: '{{.SERVE_TIMEOUT}}'
+  CURL_TIMEOUT: '{{.CURL_TIMEOUT}}'
+  SLO_TTFT_P95_MS: '{{.SLO_TTFT_P95_MS}}'
+  SLO_TPOT_P95_MS: '{{.SLO_TPOT_P95_MS}}'
+  BENCH_N: '{{.BENCH_N}}'
+  BENCH_C: '{{.BENCH_C}}'
+  BENCH_IN: '{{.BENCH_IN}}'
+  BENCH_OUT: '{{.BENCH_OUT}}'
+  BENCH_MODEL: '{{.BENCH_MODEL}}'
+  MODEL: '{{.MODEL}}'
+  GPU_GB: '{{.GPU_GB}}'
+  TP: '{{.TP}}'
+  CTX: '{{.CTX}}'
+  KV_DTYPE: '{{.KV_DTYPE}}'
+  AVG_TOKENS: '{{.AVG_TOKENS}}'
+  GPU_MEM_UTIL: '{{.GPU_MEM_UTIL}}'
+  OVERHEAD_GB: '{{.OVERHEAD_GB}}'
+  LINES: '{{.LINES}}'
+  FOLLOW: '{{.FOLLOW}}'
+  RUNTIME: '{{.RUNTIME}}'
+  Q: '{{.Q}}'
+
+tasks:
+  default:
+    desc: list tasks
+    silent: true
+    cmds:
+      - task --taskfile '{{.TASKFILE}}' --list
+
+  gpu:
+    desc: 'GPU table: memory used/total, utilization, processes (nvidia-smi)'
+    dir: '{{.USER_WORKING_DIR}}'
+    cmds:
+      - '"{{.SCRIPTS}}/gpu.sh"'
+
+  health:
+    desc: 'endpoint liveness: /health, /v1/models, one short completion'
+    dir: '{{.USER_WORKING_DIR}}'
+    cmds:
+      - '"{{.SCRIPTS}}/health.sh"'
+
+  models:
+    desc: served model ids and max context from /v1/models
+    dir: '{{.USER_WORKING_DIR}}'
+    cmds:
+      - '"{{.SCRIPTS}}/models.sh"'
+
+  metrics:
+    desc: 'key Prometheus series: running, waiting, KV usage, prefix-cache hit, TTFT/TPOT p50/p95'
+    dir: '{{.USER_WORKING_DIR}}'
+    cmds:
+      - python3 -I "{{.SCRIPTS}}/metrics.py"
+
+  status:
+    desc: gpu + health + models in one call
+    dir: '{{.USER_WORKING_DIR}}'
+    cmds:
+      - cmd: '"{{.SCRIPTS}}/gpu.sh"'
+        ignore_error: true
+      - '"{{.SCRIPTS}}/health.sh"'
+      - '"{{.SCRIPTS}}/models.sh"'
+
+  profiles:
+    desc: list launch profiles in profiles/
+    silent: true
+    cmds:
+      - ls -1 "{{.PROFILES_DIR}}" | sed -n 's/\.env$//p'
+
+  serve:
+    desc: 'start the runtime from a named profile: task serve INFER_PROFILE=<name>'
+    dir: '{{.USER_WORKING_DIR}}'
+    cmds:
+      - '"{{.SCRIPTS}}/serve.sh"'
+
+  stop:
+    desc: stop the runtime started by serve (by pid file; no profile = all)
+    dir: '{{.USER_WORKING_DIR}}'
+    cmds:
+      - '"{{.SCRIPTS}}/stop.sh"'
+
+  restart:
+    desc: stop then serve
+    cmds:
+      - task: stop
+      - task: serve
+
+  logs:
+    desc: 'tail the runtime log: task logs INFER_PROFILE=<name> LINES=200 FOLLOW=1'
+    dir: '{{.USER_WORKING_DIR}}'
+    cmds:
+      - '"{{.SCRIPTS}}/logs.sh"'
+
+  bench:
+    desc: 'fixed SLO bench: BENCH_N BENCH_C BENCH_IN BENCH_OUT; p50/p95 TTFT/TPOT/e2e; exit 1 if SLO missed; extra flags after --'
+    dir: '{{.USER_WORKING_DIR}}'
+    cmds:
+      - python3 -I "{{.SCRIPTS}}/bench.py" {{.CLI_ARGS}}
+
+  smoke-toolcall:
+    desc: 'tool-calling contract: tool_calls present, JSON args valid, streaming deltas, no false calls'
+    dir: '{{.USER_WORKING_DIR}}'
+    cmds:
+      - python3 -I "{{.SCRIPTS}}/smoke_toolcall.py" {{.CLI_ARGS}}
+
+  vram:
+    desc: 'VRAM budget from a model dir: task vram MODEL=/models/x GPU_GB=80 TP=1 CTX=32768 KV_DTYPE=fp8'
+    dir: '{{.USER_WORKING_DIR}}'
+    cmds:
+      - python3 -I "{{.SCRIPTS}}/vram.py"
+
+  flags:
+    desc: 'grep installed runtime help: task flags Q=tool RUNTIME=vllm|sglang'
+    dir: '{{.USER_WORKING_DIR}}'
+    cmds:
+      - '"{{.SCRIPTS}}/flags.sh"'
