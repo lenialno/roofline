@@ -51,4 +51,4 @@ Theory the other skills rely on (KV cache, sampling, chat format, perplexity), w
 - [roadmap.sh: Inference Engineering](https://roadmap.sh/inference-engineering): the role map; every node translated in `docs/roadmap-ru/`
 - [Claude Code: skills](https://code.claude.com/docs/en/skills), [plugins](https://code.claude.com/docs/en/plugins): package format
 - [Agent Skills specification](https://agentskills.io/specification): SKILL.md format
-- Andriy Burkov, "The Hundred-Page Language Models Book" (Russian edition: BHV-Petersburg, 2026, [buy on Ozon](https://www.ozon.ru/product/yazykovye-modeli-bez-lishnih-slov-burkov-andrey-4678629427/?at=1iao1Xu0NlUIcfcFRZUKWGxeT6SFLpfc&sh=YcvAR88O_Q)): theory in [references/theory-from-burkov.md](references/theory-from-burkov.md)
+- Andriy Burkov, "The Hundred-Page Language Models Book" (Russian edition: BHV-Petersburg, 2026, [buy on Ozon](https://www.ozon.ru/product/yazykovye-modeli-bez-lishnih-slov-burkov-andrey-4678629427/)): theory in [references/theory-from-burkov.md](references/theory-from-burkov.md)
