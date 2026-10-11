@@ -5,8 +5,6 @@
 
 <img src="assets/lenialno-icon.svg" alt="Lenialno" height="22" align="top"> Roofline, линейка Lenialno. [English](README.md)
 
-<!-- бейдж skills.sh: https://skills.sh/b/lenialno/roofline, добавить, когда страница появится -->
-
 Agent Skills для роли Inference Engineer: vLLM или SGLang на своих GPU за OpenAI-совместимым endpoint, Claude Code и Qwen Code через прокси, стабильная работа на air-gap хостах. 13 skills, один subagent Claude Code и toolbox на [Taskfile](https://taskfile.dev/); карта компетенций повторяет [roadmap.sh/inference-engineering](https://roadmap.sh/inference-engineering).
 
 ## Быстрый старт
