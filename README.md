@@ -1,8 +1,11 @@
-<p align="center"><img src="assets/lenialno.svg" alt="Lenialno" width="220"></p>
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="brand/png/readme-header-dark-1200x400-2x.png">
+  <img alt="Roofline" src="brand/png/readme-header-light-1200x400-2x.png" width="1200">
+</picture>
 
 # Roofline
 
-Roofline, a Lenialno product line. [По-русски](README.ru.md)
+<img src="assets/lenialno.svg" alt="Lenialno" height="18" align="top"> Roofline, a Lenialno product line. [По-русски](README.ru.md)
 
 [![skills.sh](https://skills.sh/b/lenialno/roofline)](https://skills.sh/lenialno/roofline)
 
@@ -82,6 +85,10 @@ Profiles: [skills/roofline-toolbox/profiles/README.md](skills/roofline-toolbox/p
 - [docs/roadmap-ru/](docs/roadmap-ru/README.md): Russian translation of all 136 nodes of roadmap.sh/inference-engineering with links to the originals
 - [skills/roofline/references/competency-map.md](skills/roofline/references/competency-map.md): which roadmap nodes are in the role and which skill covers them
 - [skills/roofline/references/theory-from-burkov.md](skills/roofline/references/theory-from-burkov.md): serving-relevant facts from Andriy Burkov's "The Hundred-Page Language Models Book" (Russian edition, BHV 2026) with page numbers
+
+## Brand
+
+Logo, mark, favicon and README headers live in [brand/](brand/BRAND.md) with the colour and geometry rules. Terminal mark: [brand/ascii.txt](brand/ascii.txt), printed by `task` with no arguments.
 
 ## Sources and license
 

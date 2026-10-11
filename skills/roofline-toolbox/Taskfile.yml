@@ -59,6 +59,8 @@ tasks:
     desc: list tasks
     silent: true
     cmds:
+      - |
+        printf '%s\n' '    __________' '   /' '  /' ' /   Roofline' ''
       - task --taskfile '{{.TASKFILE}}' --list
 
   gpu:

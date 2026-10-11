@@ -20,6 +20,7 @@
     "slo",
     "on-prem"
   ],
+  "icon": "./brand/png/avatar-512.png",
   "metadata": {
     "brand": "Lenialno"
   }

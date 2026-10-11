@@ -1,8 +1,11 @@
-<p align="center"><img src="assets/lenialno.svg" alt="Lenialno" width="220"></p>
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="brand/png/readme-header-dark-1200x400-2x.png">
+  <img alt="Roofline" src="brand/png/readme-header-light-1200x400-2x.png" width="1200">
+</picture>
 
 # Roofline
 
-Roofline, линейка Lenialno. [English](README.md)
+<img src="assets/lenialno.svg" alt="Lenialno" height="18" align="top"> Roofline, линейка Lenialno. [English](README.md)
 
 [![skills.sh](https://skills.sh/b/lenialno/roofline)](https://skills.sh/lenialno/roofline)
 
@@ -82,6 +85,10 @@ includes:
 - [docs/roadmap-ru/](docs/roadmap-ru/README.md): перевод всех 136 узлов roadmap.sh/inference-engineering со ссылками на источники
 - [skills/roofline-ru/references/competency-map.md](skills/roofline-ru/references/competency-map.md): что в роли и что вне, с привязкой к skills
 - [skills/roofline-ru/references/theory-from-burkov.md](skills/roofline-ru/references/theory-from-burkov.md): выжимка из книги Буркова "Языковые модели без лишних слов" с номерами страниц
+
+## Бренд
+
+Логотип, знак, favicon и шапки README лежат в [brand/](brand/BRAND.md) вместе с правилами цвета и геометрии. Знак для терминала: [brand/ascii.txt](brand/ascii.txt), его печатает `task` без аргументов.
 
 ## Источники и лицензия
 
