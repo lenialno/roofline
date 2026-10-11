@@ -13,6 +13,6 @@
 | [07-inference-beyond-llms.md](07-inference-beyond-llms.md) | Inference Beyond LLMs: VLM, эмбеддинги, речь, генерация изображений и видео | 16 |
 | [08-production.md](08-production.md) | Production: контейнеры, автомасштабирование, multi-cloud, выкатка и наблюдаемость | 20 |
 
-Связанные карты по версии roadmap.sh: prompt-engineering, ai-engineer, backend, mlops, devops, cpp, docker, kubernetes.
+Связанные карты по версии roadmap.sh: prompt-engineering, ai-engineer, backend, mlops, devops, docker, kubernetes и cpp; в этом переводе вместо C++ принят [Rust](https://roadmap.sh/rust): узел "Writing Custom Kernels" в [05-software.md](05-software.md) переписан под Rust (cudarc, CubeCL, Rust-CUDA) с пометкой об адаптации, остальные 135 узлов переведены без изменений.
 
 Как это используется в плагине: [карта компетенций](../../skills/roofline-ru/references/competency-map.md) показывает, какие узлы входят в роль on-prem инженера и каким skill или задачей Taskfile закрыты.

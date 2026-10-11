@@ -32,7 +32,7 @@
 | Группа roadmap | Почему вне |
 |---|---|
 | Fine-Tuning, Distillation | roadmap относит к стратегии модели: инженер заказывает, когда маленькая модель не проходит evals |
-| CUDA: custom kernels | движки выбирают ядра сами; своё ядро пишут при contributing в движок |
+| CUDA: custom kernels | движки выбирают ядра сами; своё ядро это Rust через cudarc (CUDA C компилируется NVRTC во время выполнения), CubeCL или Rust-CUDA, production-ядра остаются на CUDA C++ за FFI |
 | Multi-Cloud, GPU procurement в облаке, geo-aware LB | on-prem, один контур |
 | Disaggregation, NVIDIA Dynamo | нужны при десятках GPU и prefill-тяжёлом трафике на кластере |
 | Image & Video, Speech, Embeddings, VLM | отдельные пайплайны; переведено в roadmap-ru для справки |

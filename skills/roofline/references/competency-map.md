@@ -32,7 +32,7 @@ Source: 136 roadmap nodes (snapshot of 2026-10-07), translated in `docs/roadmap-
 | Roadmap group | Why out of scope |
 |---|---|
 | Fine-Tuning, Distillation | the roadmap files them under model strategy: the engineer orders them when a small model fails evals |
-| CUDA: custom kernels | the engines pick kernels themselves; you write your own kernel when contributing to an engine |
+| CUDA: custom kernels | the engines pick kernels themselves; a kernel of your own is Rust through cudarc (CUDA C compiled by NVRTC at runtime), CubeCL or Rust-CUDA, while production kernels stay CUDA C++ behind FFI |
 | Multi-Cloud, GPU procurement in the cloud, geo-aware LB | on-prem, a single perimeter |
 | Disaggregation, NVIDIA Dynamo | needed with dozens of GPUs and prefill-heavy traffic on a cluster |
 | Image & Video, Speech, Embeddings, VLM | separate pipelines; translated in roadmap-ru for reference |

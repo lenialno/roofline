@@ -22,12 +22,21 @@ CUDA-ядром называют функцию, которая выполняе
 - [How to profile CUDA kernels in PyTorch](https://www.youtube.com/watch?v=LuhJEEJQgUM) (видео)
 - [Master Cuda Programming: Zero to Hero](https://www.youtube.com/playlist?list=PLVVBQldz3m5v1VDhlCyB1DhPfjREsJWmf) (видео)
 
-### Написание собственных ядер (Writing Custom Kernels)
+### Написание собственных ядер на Rust (Writing Custom Kernels)
 Источник: [узел "Writing Custom Kernels" на roadmap.sh](https://roadmap.sh/inference-engineering/writing-custom-kernels@1dWPVaSQ4TfVU3Obx3m19)
 
-Собственные ядра пишут, когда существующие библиотеки не используют возможности GPU полностью для конкретной операции или архитектуры. Большинство production-ядер пишут на C++ с CUTLASS и CuTe для операций типа GEMM и с FlashInfer для вариантов внимания; Triton предлагает альтернативу на Python с более низким порогом входа. Чтобы написать эффективное ядро, нужно понимать иерархию памяти целевого GPU, занятость SM (SM occupancy) и набор инструкций Tensor Core, а это навыки на стыке программной и аппаратной части.
+Адаптация: в оригинале узел описывает C++ и Triton; здесь он переписан под Rust, оригинал по ссылке выше.
+
+Собственные ядра пишут, когда существующие библиотеки не используют возможности GPU полностью для конкретной операции или архитектуры. Production-ядра движков инференса (CUTLASS и CuTe для операций типа GEMM, FlashInfer и FlashAttention для вариантов внимания) по-прежнему написаны на CUDA C++, и из Rust их подключают через FFI. Для собственного кода на Rust есть три пути. cudarc даёт безопасные обёртки над драйвером CUDA, NVRTC, cuBLAS, cuBLASLt, cuDNN и NCCL: ядро на CUDA C компилируется в PTX во время выполнения и запускается из Rust; так устроены ядра candle и движка mistral.rs. CubeCL позволяет написать ядро как функцию Rust с атрибутом `#[cube]`, JIT-компилятор переводит её в PTX, HIP, Metal, SPIR-V или WGSL, доступны tensor cores и автотюнинг с кешем результатов; на CubeCL работает фреймворк Burn, проект в статусе alpha. Rust-CUDA компилирует Rust напрямую в PTX через собственный бэкенд rustc; проект перезапущен в 2025 году и находится на ранней стадии. При любом пути эффективное ядро требует понимания иерархии памяти целевого GPU, занятости SM (SM occupancy) и набора инструкций Tensor Core, а это навыки на стыке программной и аппаратной части.
 
 Ресурсы:
+- [coreylowman/cudarc](https://github.com/coreylowman/cudarc) (исходный код)
+- [tracel-ai/cubecl](https://github.com/tracel-ai/cubecl) (исходный код)
+- [Rust-GPU/Rust-CUDA](https://github.com/Rust-GPU/Rust-CUDA) (исходный код)
+- [Rust GPU](https://rust-gpu.github.io/) (сайт проекта)
+- [huggingface/candle](https://github.com/huggingface/candle) (исходный код)
+- [EricLBuehler/mistral.rs](https://github.com/EricLBuehler/mistral.rs) (исходный код)
+- [NVRTC Documentation](https://docs.nvidia.com/cuda/nvrtc/index.html) (официальная документация)
 - [CUDA by Example: An Introduction to General-Purpose GPU Programming](https://developer.nvidia.com/cuda-example) (книга)
 - [cuBLAS Documentation](https://docs.nvidia.com/cuda/cublas/) (официальная документация)
 - [Introduction to CUDA](https://docs.nvidia.com/cuda/cuda-programming-guide/part1.html) (официальная документация)
