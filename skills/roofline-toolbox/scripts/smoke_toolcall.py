@@ -129,8 +129,14 @@ def check_call(calls, want_city):
     return True, "get_weather(%s)" % json.dumps(parsed)
 
 
-def diagnose(content):
+def diagnose(content, msg=None):
     c = content or ""
+    reasoning = ""
+    if isinstance(msg, dict):
+        reasoning = msg.get("reasoning_content") or msg.get("reasoning") or ""
+    if not c.strip() and reasoning:
+        return ("empty content but %d chars of reasoning: a thinking model spent the budget on reasoning or the answer stayed in reasoning_content. "
+                "Raise max_tokens, disable thinking for tool calls (chat_template_kwargs enable_thinking=false on Qwen3), or add --reasoning-parser." % len(reasoning))
     if any(m in c for m in MARKERS):
         return ("model emitted the tool call as text: parser not enabled or wrong parser. "
                 "vLLM: --enable-auto-tool-choice --tool-call-parser <name>; SGLang: --tool-call-parser <name>. "
@@ -178,7 +184,7 @@ def main():
 
     # 1 non-stream
     try:
-        resp = cl.post({"messages": [sys_msg, ask], "tools": TOOLS, "tool_choice": "auto", "max_tokens": 256})
+        resp = cl.post({"messages": [sys_msg, ask], "tools": TOOLS, "tool_choice": "auto", "max_tokens": 1024})
         msg = resp["choices"][0]["message"]
         calls = msg.get("tool_calls") or []
         ok, detail = check_call(calls, "Paris")
@@ -186,7 +192,7 @@ def main():
         if ok and fr != "tool_calls":
             detail += "  (finish_reason=%r, expected 'tool_calls')" % fr
         if not ok:
-            detail += " | " + diagnose(msg.get("content"))
+            detail += " | " + diagnose(msg.get("content"), msg)
         report("nonstream", ok, detail)
         first_call = calls[0] if ok else None
     except Exception as e:
@@ -195,7 +201,7 @@ def main():
 
     # 2 stream
     try:
-        chunks = cl.post({"messages": [sys_msg, ask], "tools": TOOLS, "tool_choice": "auto", "max_tokens": 256, "stream": True}, stream=True)
+        chunks = cl.post({"messages": [sys_msg, ask], "tools": TOOLS, "tool_choice": "auto", "max_tokens": 1024, "stream": True}, stream=True)
         content, finish, calls = assemble_stream(chunks)
         ok, detail = check_call(calls, "Paris")
         if ok and not calls[0].get("id"):
@@ -210,12 +216,18 @@ def main():
 
     # 3 negative
     try:
-        resp = cl.post({"messages": [sys_msg, {"role": "user", "content": "Reply with the single word: hello"}], "tools": TOOLS, "tool_choice": "auto", "max_tokens": 32})
+        resp = cl.post({"messages": [sys_msg, {"role": "user", "content": "Reply with the single word: hello"}], "tools": TOOLS, "tool_choice": "auto", "max_tokens": 512})
         msg = resp["choices"][0]["message"]
         calls = msg.get("tool_calls") or []
         content = (msg.get("content") or "").strip()
         ok = not calls and bool(content)
-        report("negative", ok, "no false tool call, content=%r" % content[:40] if ok else "called a tool without need (%d calls) or empty content %r" % (len(calls), content[:40]))
+        if ok:
+            detail = "no false tool call, content=%r" % content[:40]
+        elif calls:
+            detail = "called a tool without need (%d calls)" % len(calls)
+        else:
+            detail = "empty content (finish_reason=%r) | %s" % (resp["choices"][0].get("finish_reason"), diagnose(content, msg))
+        report("negative", ok, detail)
     except Exception as e:
         report("negative", False, str(e)[:300])
 
@@ -225,18 +237,24 @@ def main():
         msgs = [sys_msg, ask,
                 {"role": "assistant", "content": None, "tool_calls": [{"id": call_id, "type": "function", "function": {"name": "get_weather", "arguments": json.dumps({"city": "Paris"})}}]},
                 {"role": "tool", "tool_call_id": call_id, "content": json.dumps({"city": "Paris", "temperature_c": 21, "condition": "sunny"})}]
-        resp = cl.post({"messages": msgs, "tools": TOOLS, "tool_choice": "auto", "max_tokens": 128})
+        resp = cl.post({"messages": msgs, "tools": TOOLS, "tool_choice": "auto", "max_tokens": 512})
         msg = resp["choices"][0]["message"]
         content = (msg.get("content") or "")
         calls = msg.get("tool_calls") or []
         ok = bool(content.strip()) and not calls and ("21" in content or "sunny" in content.lower())
-        report("roundtrip", ok, "final answer uses tool result: %r" % content.strip()[:60] if ok else "answer=%r tool_calls=%d (expected prose using 21/sunny, no new call) | if HTTP 400: chat template rejects role=tool messages" % (content.strip()[:60], len(calls)))
+        if ok:
+            detail = "final answer uses tool result: %r" % content.strip()[:60]
+        elif not content.strip() and not calls:
+            detail = "empty content | " + diagnose(content, msg)
+        else:
+            detail = "answer=%r tool_calls=%d (expected prose using 21/sunny, no new call)" % (content.strip()[:60], len(calls))
+        report("roundtrip", ok, detail)
     except Exception as e:
         report("roundtrip", False, str(e)[:300] + " | HTTP 400 here usually means the chat template has no tool-message support")
 
     # 5 parallel (informational)
     try:
-        resp = cl.post({"messages": [sys_msg, {"role": "user", "content": "Get the weather in Paris and in Berlin using the tool."}], "tools": TOOLS, "tool_choice": "auto", "max_tokens": 256})
+        resp = cl.post({"messages": [sys_msg, {"role": "user", "content": "Get the weather in Paris and in Berlin using the tool."}], "tools": TOOLS, "tool_choice": "auto", "max_tokens": 1024})
         calls = resp["choices"][0]["message"].get("tool_calls") or []
         report("parallel", len(calls) >= 2, "%d tool call(s) for two cities%s" % (len(calls), "" if len(calls) >= 2 else " (parallel calls not produced; fine unless clients rely on them)"), required=False)
     except Exception as e:

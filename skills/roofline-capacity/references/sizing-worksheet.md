@@ -23,3 +23,4 @@ Verification: `task vram MODEL=/models/Qwen3-32B-FP8 GPU_GB=80 TP=2 CTX=65536 KV
 - MoE: all weights stay in memory, the gain is only in per-request decode speed
 - Chunked prefill: long prompts no longer block decode, but total compute is the same; TTFT for a cold 50k prompt on one replica is seconds
 - Overhead: cudagraph, activations, NCCL buffers; with TP above 1, budget 3-4 GB per GPU
+- Context above the model's native length (Qwen3-32B: 40960) needs YaRN in the profile, otherwise the server refuses to start or quality drops on long prompts; look the flag up with `task flags Q=rope`

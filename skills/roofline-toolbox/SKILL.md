@@ -58,6 +58,8 @@ One `profiles/<name>.env` per way to launch a runtime: `RUNTIME`, `MODEL`, `SERV
 - `metrics` HINT lines name the bottleneck: queue with KV above 90% is KV-bound, preemptions mean KV exhaustion, prefix hit below 30% means an unstable prefix or round-robin across replicas
 - `smoke-toolcall` FAIL with `<tool_call>` text in content: the parser is off or wrong for the model family
 - `bench` SLO FAIL lists which percentile missed; rerun with lower `BENCH_C` to find the concurrency the server sustains
+- Thinking models: `smoke-toolcall` gives each call up to 1024 tokens and names the case where reasoning ate the budget and `content` came back empty; disable thinking for tool calls or add the reasoning parser
+- Cloud endpoints such as OpenRouter ignore `ignore_eos`, so bench outputs can be shorter than `BENCH_OUT`; TTFT and TPOT stay valid, total tokens/s does not. Pass `BENCH_MODEL` there, otherwise the first model in the provider list is used
 
 ## Sources
 

@@ -3,7 +3,7 @@
 
 Weights: sum of *.safetensors bytes when present, else parameter-count estimate from config.json.
 KV per token: 2 * layers * kv_heads * head_dim * bytes (MLA: layers * (kv_lora_rank + qk_rope_head_dim) * bytes).
-Knobs (env or task vars): GPU_GB=80 TP=1 GPU_MEM_UTIL=0.90 OVERHEAD_GB=3 CTX=<max_model_len> KV_DTYPE=auto|fp8 AVG_TOKENS=<ctx/4>
+Knobs (env or task vars): GPU_GB=80 (GiB) TP=1 GPU_MEM_UTIL=0.90 OVERHEAD_GB=3 CTX=<max_model_len> KV_DTYPE=auto|fp8 AVG_TOKENS=<ctx/4>
 Exit 2 when the config cannot be read.
 """
 import glob
@@ -104,13 +104,13 @@ def main():
     print("arch               layers=%d hidden=%d heads=%d kv_heads=%d head_dim=%d vocab=%d max_pos=%d" % (layers, hidden, heads, kv_heads, head_dim, vocab, max_pos))
     if params:
         print("params (est)       %.1f B  (from config.json; put the safetensors files next to it for exact weights)" % (params / 1e9))
-    print("weights            %.1f GB  (%s, %.2g B/param)" % (weights_gb, wsrc, wbytes))
+    print("weights            %.1f GiB (%s, %.2g B/param)" % (weights_gb, wsrc, wbytes))
     print("kv per token       %.0f KB  (%s)" % (kv_per_tok / 1024, kv_note))
-    print("gpu budget         %d x %.0f GB x util %.2f = %.1f GB usable; overhead %.0f GB/gpu" % (tp, gpu_gb, util, usable, overhead))
+    print("gpu budget         %d x %.0f GiB x util %.2f = %.1f GiB usable; overhead %.0f GiB/gpu" % (tp, gpu_gb, util, usable, overhead))
     if kv_budget <= 0:
-        print("RESULT             weights do not fit: need %.1f GB, have %.1f GB after overhead. Raise TP, quantize, or use a bigger GPU." % (weights_gb, usable - overhead * tp))
+        print("RESULT             weights do not fit: need %.1f GiB, have %.1f GiB after overhead. Raise TP, quantize, or use a bigger GPU." % (weights_gb, usable - overhead * tp))
         return 1
-    print("kv budget          %.1f GB = %d tokens in flight" % (kv_budget, tokens_in_kv))
+    print("kv budget          %.1f GiB = %d tokens in flight" % (kv_budget, tokens_in_kv))
     print("concurrency        %d requests at full ctx %d; ~%d requests at avg %d tokens" % (tokens_in_kv // ctx if ctx else 0, ctx, tokens_in_kv // avg_tokens if avg_tokens else 0, avg_tokens))
     if tokens_in_kv < ctx:
         print("WARN               KV budget below one full-context request; lower CTX (max-model-len), use KV_DTYPE=fp8, or raise TP")
