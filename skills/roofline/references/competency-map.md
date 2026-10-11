@@ -1,6 +1,6 @@
 # Competency map by roadmap.sh/inference-engineering
 
-Source: 136 roadmap nodes (snapshot of 2026-10-07), translated in `docs/roadmap-ru/`. The "Here" column shows what the engineer does in this product (on-prem, vLLM/SGLang, Make).
+Source: 136 roadmap nodes (snapshot of 2026-10-07), translated in `docs/roadmap-ru/`. The "Here" column shows what the engineer does in this product (on-prem, vLLM/SGLang, Taskfile).
 
 ## In scope
 

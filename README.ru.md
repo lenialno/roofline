@@ -1,32 +1,51 @@
-# roofline
+<p align="center"><img src="assets/lenialno.svg" alt="Lenialno" width="220"></p>
 
-[English](README.md)
+# Roofline
 
-Claude Code plugin для роли Inference Engineer: on-prem LLM-serving на vLLM или SGLang с OpenAI-совместимым endpoint, клиенты Claude Code и Qwen Code через прокси, air-gap. Skills на двух языках (английские без суффикса, русские с суффиксом `-ru`), toolbox-skill с Taskfile и скриптами, один subagent. MCP и hooks отсутствуют намеренно: всё live-состояние даёт `task`.
+Roofline, линейка Lenialno. [English](README.md)
+
+[![skills.sh](https://skills.sh/b/lenialno/roofline)](https://skills.sh/lenialno/roofline)
+
+Claude Code plugin и Agent Skills для роли Inference Engineer: on-prem LLM-serving на vLLM или SGLang с OpenAI-совместимым endpoint, клиенты Claude Code и Qwen Code через прокси, air-gap. Шесть skills со знаниями на английском и на русском (суффикс `-ru`), toolbox-skill с Taskfile и скриптами без зависимостей, один subagent Claude Code для разбора инцидентов. Карта компетенций повторяет [roadmap.sh/inference-engineering](https://roadmap.sh/inference-engineering); каждый skill перечисляет свои источники. MCP и hooks отсутствуют намеренно: всё live-состояние даёт `task`.
+
+## Skills
+
+| Skill | Задача |
+|---|---|
+| `roofline` | маршрутизатор роли: что делать первым, что в роли и что вне, какой skill или задачу брать |
+| `roofline-runtime` | поднять и держать vLLM или SGLang: выбор движка, порядок флагов, профили запуска, air-gap, фейлы при старте |
+| `roofline-toolcall` | tool calling и chat template: парсер по семейству модели, стриминг tool_calls, подключение Claude Code и Qwen Code |
+| `roofline-perf` | метрики и SLO, бюджет VRAM и KV-кеша, батчинг, prefix cache, квантование с протоколом проверки качества, спекулятивное декодирование, бенч |
+| `roofline-incident` | runbook: порядок триажа, виды OOM, очередь, нарушение p95, регресс после обновления, постмортем |
+| `roofline-capacity` | расчёт GPU и TP, concurrency под SLO, реплики, canary-выкатка и откат, стоимость |
+| `roofline-toolbox` | Taskfile и скрипты: gpu, health, models, metrics, serve, stop, bench, smoke-toolcall, vram, flags |
+
+Русские версии: те же имена с суффиксом `-ru`. Toolbox общий для обоих языков. Claude подхватывает skills по описанию: "подними vLLM", "tool calls приходят текстом", "почему медленно", "очередь растёт", "сколько GPU нужно".
 
 ## Установка
 
-```bash
-claude --plugin-dir /path/to/roofline        # на время сессии
-claude plugin validate /path/to/roofline     # проверка раскладки и frontmatter
-```
-
-Постоянно, во всех проектах (user scope), репозиторий сам и есть marketplace:
+Как Agent Skills, для любого агента с их поддержкой (Claude Code, Codex, Cursor, OpenCode и другие):
 
 ```bash
-claude plugin marketplace add ssh://git@gitlab.millennial.ninja:2222/roofline/claude-code-skills.git
-claude plugin install roofline@leo-skills
+npx skills add lenialno/roofline --skill roofline-toolbox --skill roofline-runtime-ru   # выбранные skills
+npx skills add lenialno/roofline --all                                                   # все skills, все агенты
+npx skills add lenialno/roofline -g -a claude-code --skill roofline-toolbox              # user scope, только Claude Code (~/.claude/skills/)
 ```
 
-Обновление после push: `claude plugin marketplace update leo-skills`, затем `claude plugin update roofline@leo-skills` и `/reload-plugins`. Из локального клона (`claude plugin marketplace add ./roofline`) правки подхватываются сразу, без обновления.
+Как Claude Code plugin, во всех проектах на машине (user scope), из каталога Lenialno [lenialno/skills](https://github.com/lenialno/skills):
 
-Без Claude Code plugin, как обычные Agent Skills (Claude Code, Codex, Cursor и другие): `npx skills add <owner>/<repo> --skill roofline-toolbox --skill roofline-runtime-ru` или `npx skills add <owner>/<repo> --all`; `-g` ставит в `~/.claude/skills/`.
+```bash
+claude plugin marketplace add lenialno/skills
+claude plugin install roofline@lenialno
+```
 
-Skills в сессии: `/roofline:roofline-ru` (маршрутизатор), `roofline-runtime-ru`, `roofline-toolcall-ru`, `roofline-perf-ru`, `roofline-incident-ru`, `roofline-capacity-ru`, общий `roofline-toolbox`; те же skills без `-ru` на английском. Claude подхватывает их по описанию: "подними vLLM", "tool calls приходят текстом", "почему медленно", "очередь растёт", "сколько GPU нужно".
+Обновление после push: `claude plugin marketplace update lenialno`, затем `claude plugin update roofline@lenialno` и `/reload-plugins`. На одну сессию из локального клона: `claude --plugin-dir /path/to/roofline`; проверка клона: `claude plugin validate /path/to/roofline`.
+
+Для toolbox нужны python3 и curl; [go-task](https://taskfile.dev) для `task` (`brew install go-task`); nvidia-smi для `gpu`. Скрипты работают и без task.
 
 ## Taskfile
 
-Нужен [go-task](https://taskfile.dev) (`brew install go-task`). Из любого проекта: `task -t /path/to/roofline/Taskfile.yml <задача>` (корневой Taskfile включает toolbox без namespace), либо include в проектный Taskfile.yml:
+Из любого проекта: `task -t /path/to/roofline/Taskfile.yml <задача>` (корневой Taskfile включает toolbox без namespace), либо include в проектный Taskfile.yml:
 
 ```yaml
 version: '3'
@@ -42,8 +61,9 @@ includes:
 | `gpu` | память, загрузка, процессы по `nvidia-smi` |
 | `health` | `/health`, `/v1/models`, одна короткая генерация с замером |
 | `models` | список моделей и max context |
+| `profiles` | список профилей запуска в `profiles/` |
 | `metrics` | очередь, KV usage, prefix cache hit, preemptions, p50/p95 TTFT и TPOT из `/metrics` |
-| `status` | `gpu` плюс `health` плюс `models` |
+| `status` | `gpu`, затем `health`, затем `models` |
 | `serve INFER_PROFILE=<name>` | запуск по профилю из `profiles/`, ожидание `/health`, pid и лог в `.inference-state/` |
 | `stop`, `restart`, `logs` | остановка по pid, перезапуск, хвост лога (`LINES=200 FOLLOW=1`) |
 | `bench` | фиксированный SLO-бенч: `BENCH_N`, `BENCH_C`, `BENCH_IN`, `BENCH_OUT`; `-- --json` для строки JSON; exit 1 при нарушении SLO |
@@ -63,6 +83,6 @@ includes:
 - [skills/roofline-ru/references/competency-map.md](skills/roofline-ru/references/competency-map.md): что в роли и что вне, с привязкой к skills
 - [skills/roofline-ru/references/theory-from-burkov.md](skills/roofline-ru/references/theory-from-burkov.md): выжимка из книги Буркова "Языковые модели без лишних слов" с номерами страниц
 
-## Лицензия
+## Источники и лицензия
 
-MIT, см. [LICENSE](LICENSE). Источники каждого skill перечислены в его разделе "Источники".
+Основные источники: [roadmap.sh: Inference Engineering](https://roadmap.sh/inference-engineering), [документация vLLM](https://docs.vllm.ai/), [документация SGLang](https://docs.sglang.ai/), [документация Claude Code](https://code.claude.com/docs/en/skills), [спецификация Agent Skills](https://agentskills.io/specification), книга Андрея Буркова. Каждый skill заканчивается своим разделом "Источники". Лицензия MIT, см. [LICENSE](LICENSE).

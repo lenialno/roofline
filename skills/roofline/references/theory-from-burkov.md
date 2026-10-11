@@ -1,6 +1,6 @@
 # Theory for the engineer: a digest of Burkov's book
 
-Source: Andriy Burkov, "The Hundred-Page Language Models Book: Hands-On with PyTorch"; page numbers refer to the Russian edition (BHV-Petersburg, 2026, 208 pages). The full notes live in Obsidian ("30 Knowledge/LLM"). Only what changes serving decisions is here; pages are the book's.
+Source: Andriy Burkov, "The Hundred-Page Language Models Book: Hands-On with PyTorch"; page numbers refer to the Russian edition (BHV-Petersburg, 2026, 208 pages). Only what changes serving decisions is here; pages are the book's.
 
 | Fact from the book | Pages | What it means for serving |
 |---|---|---|

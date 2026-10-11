@@ -1,8 +1,12 @@
-# roofline
+<p align="center"><img src="assets/lenialno.svg" alt="Lenialno" width="220"></p>
 
-[По-русски](README.ru.md)
+# Roofline
 
-Agent Skills for the Inference Engineer role: on-prem LLM serving with vLLM or SGLang behind an OpenAI-compatible endpoint, clients such as Claude Code and Qwen Code through a proxy, air-gapped hosts. Six knowledge skills in English and in Russian (`-ru` suffix), one toolbox skill with a Taskfile and dependency-free scripts, one Claude Code subagent for incident investigation. The competency map follows [roadmap.sh/inference-engineering](https://roadmap.sh/inference-engineering); every skill lists its sources.
+Roofline, a Lenialno product line. [По-русски](README.ru.md)
+
+[![skills.sh](https://skills.sh/b/lenialno/roofline)](https://skills.sh/lenialno/roofline)
+
+Agent Skills for the Inference Engineer role: on-prem LLM serving with vLLM or SGLang behind an OpenAI-compatible endpoint, clients such as Claude Code and Qwen Code through a proxy, air-gapped hosts. Six knowledge skills in English and in Russian (`-ru` suffix), one toolbox skill with a Taskfile and dependency-free scripts, one Claude Code subagent for incident investigation. The competency map follows [roadmap.sh/inference-engineering](https://roadmap.sh/inference-engineering); every skill lists its sources. No MCP servers and no hooks by design: live state comes from `task`.
 
 ## Skills
 
@@ -23,19 +27,19 @@ Russian versions: the same names with `-ru`. The toolbox is language-neutral and
 As Agent Skills, for any agent that supports them (Claude Code, Codex, Cursor, OpenCode and others):
 
 ```bash
-npx skills add <owner>/<repo> --skill roofline-toolbox --skill roofline-runtime   # pick skills
-npx skills add <owner>/<repo> --all                                                 # everything, all agents
-npx skills add <owner>/<repo> -g -a claude-code --skill roofline-toolbox            # user scope, Claude Code only
+npx skills add lenialno/roofline --skill roofline-toolbox --skill roofline-runtime   # pick skills
+npx skills add lenialno/roofline --all                                                 # everything, all agents
+npx skills add lenialno/roofline -g -a claude-code --skill roofline-toolbox            # user scope, Claude Code only
 ```
 
-As a Claude Code plugin, in every project on the machine. The repository is its own marketplace:
+As a Claude Code plugin, in every project on the machine, from the Lenialno catalog [lenialno/skills](https://github.com/lenialno/skills):
 
 ```bash
-claude plugin marketplace add <git url or owner/repo>
-claude plugin install roofline@leo-skills
+claude plugin marketplace add lenialno/skills
+claude plugin install roofline@lenialno
 ```
 
-Updates: `claude plugin marketplace update leo-skills`, then `claude plugin update roofline@leo-skills` and `/reload-plugins`. A marketplace added from a local clone loads the plugin in place, so edits apply at the next session. For one session only: `claude --plugin-dir /path/to/roofline`.
+Updates: `claude plugin marketplace update lenialno`, then `claude plugin update roofline@lenialno` and `/reload-plugins`. For one session from a local clone: `claude --plugin-dir /path/to/roofline`.
 
 Requirements for the toolbox: python3 and curl; [go-task](https://taskfile.dev) for `task`; nvidia-smi for `gpu`. Scripts also run without task.
 
@@ -57,6 +61,7 @@ Commands run in the project directory, where `inference.env` (`KEY=value` lines)
 | `gpu` | memory, utilization, processes from `nvidia-smi` |
 | `health` | `/health`, `/v1/models`, one short completion with latency |
 | `models` | served model ids and max context |
+| `profiles` | list launch profiles in `profiles/` |
 | `metrics` | queue, KV usage, prefix-cache hit rate, preemptions, p50/p95 TTFT and TPOT from `/metrics` |
 | `status` | `gpu`, then `health`, then `models` |
 | `serve INFER_PROFILE=<name>` | start from a profile in `profiles/`, wait for `/health`, pid and log in `.inference-state/` |

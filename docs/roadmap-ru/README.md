@@ -15,4 +15,4 @@
 
 Связанные карты по версии roadmap.sh: prompt-engineering, ai-engineer, backend, mlops, devops, cpp, docker, kubernetes.
 
-Как это используется в плагине: [карта компетенций](../../skills/roofline/references/competency-map.md) показывает, какие узлы входят в роль on-prem инженера и каким skill или задачей Taskfile закрыты.
+Как это используется в плагине: [карта компетенций](../../skills/roofline-ru/references/competency-map.md) показывает, какие узлы входят в роль on-prem инженера и каким skill или задачей Taskfile закрыты.
