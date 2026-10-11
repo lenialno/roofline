@@ -1,6 +1,6 @@
 ---
 name: roofline-ru
-description: "Маршрутизатор роли Inference Engineer для on-prem LLM-serving (vLLM/SGLang, OpenAI-совместимый endpoint, air-gap). Use when the user asks what to do first with a local LLM server, how to approach a serving task, which skill, make target or agent to use, what is inside or outside the inference engineer role, or talks about LLM serving, GPU inference, inference engineering in general terms. Russian-language version; the English skill has the same name without -ru."
+description: "Маршрутизатор роли Inference Engineer для on-prem LLM-serving (vLLM/SGLang, OpenAI-совместимый endpoint, air-gap). Use when the user asks what to do first with a local LLM server, how to approach a serving task, which skill, task or agent to use, what is inside or outside the inference engineer role, or talks about LLM serving, GPU inference, inference engineering in general terms. Russian-language version; the English skill has the same name without -ru."
 license: MIT
 ---
 

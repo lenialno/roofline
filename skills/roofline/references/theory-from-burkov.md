@@ -1,0 +1,16 @@
+# Theory for the engineer: a digest of Burkov's book
+
+Source: Andriy Burkov, "The Hundred-Page Language Models Book: Hands-On with PyTorch"; page numbers refer to the Russian edition (BHV-Petersburg, 2026, 208 pages). The full notes live in Obsidian ("30 Knowledge/LLM"). Only what changes serving decisions is here; pages are the book's.
+
+| Fact from the book | Pages | What it means for serving |
+|---|---|---|
+| KV cache: after training the K and V matrices are fixed, so the keys and values of earlier tokens never change; they are computed once and stored. For a new token only its own K and V are computed and appended to the cache. RoPE does not get in the way of caching: the rotation is applied only to the new token at position L+1 | 140-141 | the KV cache is memory, not compute: its size grows linearly with context length and the number of concurrent requests. `task vram` computes the budget |
+| Plain pairwise attention grows quadratically with sequence length; long context is expensive | 149-159 | prefill of long prompts (Claude Code: 20-100k tokens) is compute-bound; the fix is prefix cache and chunked prefill, not quantization |
+| The format of roles and answer boundaries must match the training format. ChatML: `<\|im_start\|>role`, text, `<\|im_end\|>`; roles system, user, assistant. One prompt-building function for both training and inference | 164-170 | the chat template in tokenizer_config.json is the model's contract. A foreign or trimmed template breaks tool calling before any parser gets a chance |
+| Sampling: temperature divides the logits, top-k keeps k candidates, top-p keeps the smallest set whose probability mass is at least p, frequency and presence penalties lower the logits of repeats. Reducing randomness does not verify facts | 174-179 | temperature 0 for benches and smoke tests (reproducibility); speculative decoding loses acceptance rate at high temperature |
+| Perplexity: the exponent of the mean loss on real tokens; lower is better; compare only on the same data and tokenization | 85-89 | PPL before and after quantization on your own text. Growth above 1-2% is a signal, not noise |
+| LoRA: the base weights are frozen, a low-rank correction is trained, the base model stays in memory | 179-183 | many LoRAs on one base: route the request to the replica where the adapter is already loaded (roadmap: LoRA-aware routing) |
+| MoE activates a subset of experts per token | 199 | in a batch nearly all experts are active: count memory for the weights in full, the gain is only in compute per request |
+| Compression: quantization, pruning, distillation | 200 | quantization is the only one the serving engineer does; distillation is an order for the ML team |
+| A jailbreak bypasses the model's restrictions, prompt injection inserts commands through external data | 201-202 | a tool-calling agent executes injections from tool results; the defense lives in the client and the proxy, not the engine |
+| Instruction tuning does not guarantee factual correctness; the model's explanation does not prove how the answer was produced | 155, 192 | evals and smoke tests verify behavior, not the model's statements about itself |

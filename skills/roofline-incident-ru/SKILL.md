@@ -1,6 +1,6 @@
 ---
 name: roofline-incident-ru
-description: "Runbook инцидентов LLM-serving на vLLM/SGLang: endpoint не отвечает, CUDA OOM, очередь растёт, TTFT или TPOT p95 выше SLO, preemptions, таймауты клиентов, tool calls сломались после обновления. Use when the server is down or degraded, requests time out, GPU memory is full, latency percentiles spiked, Claude Code or Qwen Code report errors, or to run the triage sequence make health, metrics, gpu, logs. Russian-language version; the English skill has the same name without -ru."
+description: "Runbook инцидентов LLM-serving на vLLM/SGLang: endpoint не отвечает, CUDA OOM, очередь растёт, TTFT или TPOT p95 выше SLO, preemptions, таймауты клиентов, tool calls сломались после обновления. Use when the server is down or degraded, requests time out, GPU memory is full, latency percentiles spiked, Claude Code or Qwen Code report errors, or to run the triage sequence task health, metrics, gpu, logs. Russian-language version; the English skill has the same name without -ru."
 license: MIT
 ---
 

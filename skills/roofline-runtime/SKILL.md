@@ -1,6 +1,6 @@
 ---
 name: roofline-runtime
-description: Bring up vLLM or SGLang on-prem and keep it healthy: engine choice, flag order, launch profiles, air-gap, docker, make serve/stop/logs/flags. Use when asked to start, launch, configure, restart or stop a vLLM or SGLang server, choose between vLLM and SGLang, write a launch profile, set tensor parallel, max-model-len, gpu-memory-utilization, or when the server fails to start (OOM at load, port busy, unsupported model, missing tokenizer).
+description: "Bring up vLLM or SGLang on-prem and keep it healthy: engine choice, flag order, launch profiles, air-gap, docker, task serve/stop/logs/flags. Use when asked to start, launch, configure, restart or stop a vLLM or SGLang server, choose between vLLM and SGLang, write a launch profile, set tensor parallel, max-model-len, gpu-memory-utilization, or when the server fails to start (OOM at load, port busy, unsupported model, missing tokenizer)."
 license: MIT
 ---
 

@@ -11,7 +11,7 @@ claude --plugin-dir /path/to/roofline        # на время сессии
 claude plugin validate /path/to/roofline     # проверка раскладки и frontmatter
 ```
 
-Постоянно, во всех проектах (user scope), репозиторий сам является marketplace:
+Постоянно, во всех проектах (user scope), репозиторий сам и есть marketplace:
 
 ```bash
 claude plugin marketplace add ssh://git@gitlab.millennial.ninja:2222/roofline/claude-code-skills.git

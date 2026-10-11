@@ -1,6 +1,6 @@
 ---
 name: roofline-toolcall-ru
-description: "Настроить tool calling и chat template на vLLM/SGLang для Claude Code, Qwen Code и OpenAI-совместимых прокси: выбор --tool-call-parser и --reasoning-parser по семейству модели, проверка шаблона, стриминг tool_calls, make smoke-toolcall. Use when tool calls come back as plain text, arguments are not valid JSON, a client ignores or breaks on tools, the server returns 400 on role tool messages, thinking tags leak into content, or when connecting Claude Code, Qwen Code or a proxy to a local model. Russian-language version; the English skill has the same name without -ru."
+description: "Настроить tool calling и chat template на vLLM/SGLang для Claude Code, Qwen Code и OpenAI-совместимых прокси: выбор --tool-call-parser и --reasoning-parser по семейству модели, проверка шаблона, стриминг tool_calls, task smoke-toolcall. Use when tool calls come back as plain text, arguments are not valid JSON, a client ignores or breaks on tools, the server returns 400 on role tool messages, thinking tags leak into content, or when connecting Claude Code, Qwen Code or a proxy to a local model. Russian-language version; the English skill has the same name without -ru."
 license: MIT
 ---
 
