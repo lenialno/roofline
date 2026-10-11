@@ -1,0 +1,51 @@
+name: check
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - uses: arduino/setup-task@v2
+        with:
+          version: 3.x
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Repository checks (skills, typography, links)
+        run: python3 .github/scripts/check.py
+
+      - name: Claude Code plugin manifest
+        run: npx -y @anthropic-ai/claude-code@latest plugin validate .
+
+      - name: Agent Skills discovery (expects 13 skills)
+        env:
+          DISABLE_TELEMETRY: "1"
+        run: |
+          out=$(npx -y skills@latest add . --list 2>&1 | sed 's/\x1b\[[0-9;]*[A-Za-z]//g')
+          echo "$out" | grep -E 'Found [0-9]+ skills'
+          echo "$out" | grep -q 'Found 13 skills'
+
+      - name: Scripts compile
+        run: |
+          bash -n skills/roofline-toolbox/scripts/*.sh
+          python3 -m py_compile skills/roofline-toolbox/scripts/*.py
+
+      - name: Taskfile parses
+        run: task --list
