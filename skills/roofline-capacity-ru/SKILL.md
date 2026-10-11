@@ -1,11 +1,12 @@
 ---
-name: inference-capacity
-description: Спроектировать on-prem LLM-serving под нагрузку и безопасно выкатить: расчёт GPU, VRAM и TP под модель и контекст, concurrency под SLO, число реплик, выбор модели под evals, план canary-выкатки и отката, фиксация версий, перенос весов в air-gap. Use when asked how many GPUs are needed, which model fits the hardware, how many concurrent Claude Code or Qwen Code users a server handles, how to roll out a new model or runtime version safely, or to estimate cost of dedicated inference.
+name: roofline-capacity-ru
+description: Спроектировать on-prem LLM-serving под нагрузку и безопасно выкатить: расчёт GPU, VRAM и TP под модель и контекст, concurrency под SLO, число реплик, выбор модели под evals, план canary-выкатки и отката, фиксация версий, перенос весов в air-gap. Use when asked how many GPUs are needed, which model fits the hardware, how many concurrent Claude Code or Qwen Code users a server handles, how to roll out a new model or runtime version safely, or to estimate cost of dedicated inference. Russian-language version; the English skill has the same name without -ru.
+license: MIT
 ---
 
 # Capacity и выкатка
 
-Все `task` ниже: `task -t ${CLAUDE_PLUGIN_ROOT}/Taskfile.yml <задача>` или include этого Taskfile в проектном (`task infer:<задача>`). Переменные `INFER_URL`, `INFER_PROFILE` берутся из окружения, из аргументов (`task serve INFER_PROFILE=x`) или из `inference.env` в текущем каталоге.
+Все `task` ниже: `task -t ${CLAUDE_SKILL_DIR}/../roofline-toolbox/Taskfile.yml <задача>` или include этого Taskfile в проектном (`task infer:<задача>`). Переменные `INFER_URL`, `INFER_PROFILE` берутся из окружения, из аргументов (`task serve INFER_PROFILE=x`) или из `inference.env` в текущем каталоге.
 
 ## Входные данные
 
@@ -63,3 +64,10 @@ description: Спроектировать on-prem LLM-serving под нагру�
 ## Стоимость
 
 Dedicated против API (roadmap: Cost Estimation): GPU-час x число GPU x часы против цены за токен x реальный трафик за то же окно, плюс время инженера. Для агентов с длинными промптами и prefix cache dedicated выигрывает раньше: API считает все входные токены, свой сервер считает только некешированные.
+
+## Источники
+
+- roadmap.sh: [Sizing and Procurement](https://roadmap.sh/inference-engineering/sizing-procurement@da0HGfSDr6_DV4ZJcrcIB), [Cost Estimation](https://roadmap.sh/inference-engineering/cost-estimation@Gof4kW2LbkNCtH68c7Xvq), [Zero-Downtime Deployment](https://roadmap.sh/inference-engineering/zero-downtime-deplo@le4sPQ0h9l-vlmCB4G8ZY), [Dependency Management](https://roadmap.sh/inference-engineering/dependency-management@wEaM8VyAo6MFsc3RXQ7Ar), [Model Parallelism](https://roadmap.sh/inference-engineering/model-parallelism@CiXsdHHL0e2DN4ICI5jeX)
+- [vLLM: parallelism and scaling](https://docs.vllm.ai/en/latest/serving/parallelism_scaling/)
+- [Закон Литтла](https://en.wikipedia.org/wiki/Little%27s_law): связь RPS, задержки и одновременных запросов
+- Бурков: квадратичная стоимость внимания, с. 149-159; MoE, с. 199

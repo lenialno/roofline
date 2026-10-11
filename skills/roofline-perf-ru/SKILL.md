@@ -1,11 +1,12 @@
 ---
-name: inference-perf
-description: Ускорить и измерить LLM-инференс на vLLM/SGLang: бюджет VRAM и KV-кеша, continuous batching, prefix/radix cache, квантование (FP8, AWQ, GPTQ, fp8 KV) и его цена для tool calling, спекулятивное декодирование, TTFT/TPOT/p95, методика бенча (make bench, make vram, make metrics). Use when asked why the server is slow, how to raise throughput or concurrency, which quantization to pick, how to size the KV cache, tune max-num-seqs, max-num-batched-tokens or max-model-len, or how to run and read a benchmark.
+name: roofline-perf-ru
+description: Ускорить и измерить LLM-инференс на vLLM/SGLang: бюджет VRAM и KV-кеша, continuous batching, prefix/radix cache, квантование (FP8, AWQ, GPTQ, fp8 KV) и его цена для tool calling, спекулятивное декодирование, TTFT/TPOT/p95, методика бенча (make bench, make vram, make metrics). Use when asked why the server is slow, how to raise throughput or concurrency, which quantization to pick, how to size the KV cache, tune max-num-seqs, max-num-batched-tokens or max-model-len, or how to run and read a benchmark. Russian-language version; the English skill has the same name without -ru.
+license: MIT
 ---
 
 # Производительность
 
-Все `task` ниже: `task -t ${CLAUDE_PLUGIN_ROOT}/Taskfile.yml <задача>` или include этого Taskfile в проектном (`task infer:<задача>`). Переменные `INFER_URL`, `INFER_PROFILE` берутся из окружения, из аргументов (`task serve INFER_PROFILE=x`) или из `inference.env` в текущем каталоге.
+Все `task` ниже: `task -t ${CLAUDE_SKILL_DIR}/../roofline-toolbox/Taskfile.yml <задача>` или include этого Taskfile в проектном (`task infer:<задача>`). Переменные `INFER_URL`, `INFER_PROFILE` берутся из окружения, из аргументов (`task serve INFER_PROFILE=x`) или из `inference.env` в текущем каталоге.
 
 ## Метрики и цели
 
@@ -68,3 +69,10 @@ KV на токен = 2 x слои x kv_heads x head_dim x байт. Qwen3-32B: 2
 ## Бенч
 
 `task bench BENCH_N=32 BENCH_C=8 BENCH_IN=2048 BENCH_OUT=256`: фиксированный промпт, `temperature 0`, `ignore_eos`, p50/p95/p99 TTFT, TPOT, e2e, общий tok/s, вердикт по `SLO_TTFT_P95_MS` и `SLO_TPOT_P95_MS`. Правила: baseline до изменений, одна переменная за прогон, длины как у реальных клиентов, прогрев перед замером, результаты в журнал. Методика и шаблон записи: [references/bench-protocol.md](references/bench-protocol.md).
+
+## Источники
+
+- [vLLM: optimization and tuning](https://docs.vllm.ai/en/latest/configuration/optimization/), [quantization](https://docs.vllm.ai/en/latest/features/quantization/), [speculative decoding](https://docs.vllm.ai/en/latest/features/spec_decode/), [automatic prefix caching](https://docs.vllm.ai/en/latest/features/automatic_prefix_caching/), [metrics design](https://docs.vllm.ai/en/latest/design/metrics/)
+- [SGLang: hyperparameter tuning](https://docs.sglang.ai/advanced_features/hyperparameter_tuning.html), [speculative decoding](https://docs.sglang.ai/advanced_features/speculative_decoding.html), [quantization](https://docs.sglang.ai/advanced_features/quantization.html), [production metrics](https://docs.sglang.ai/references/production_metrics.html), [bench_serving](https://docs.sglang.ai/developer_guide/bench_serving.html), [genai-bench](https://github.com/sgl-project/genai-bench)
+- roadmap.sh: [Time to First Token](https://roadmap.sh/inference-engineering/time-to-first-token@xCgNhwbS_ELxEyRHD1enO), [Bottleneck Analysis](https://roadmap.sh/inference-engineering/bottleneck-analysis@Gtd4g4MtB9zFfahRpbE2K), [Quantization](https://roadmap.sh/inference-engineering/quantization@DaSqcLHfnJ4_n9utVVTSk), [Speculative Decoding](https://roadmap.sh/inference-engineering/speculative-decoding@gMWgd10cxcQG_RG2oSAEH), [Caching](https://roadmap.sh/inference-engineering/caching@PzEj5yq1lDQ324RWYpDdQ), [Performance Benchmarking](https://roadmap.sh/inference-engineering/performance-benchmarking@XXfjlqd0CYHwBR5-Kdmmi)
+- Бурков: перплексия, с. 85-89; KV-кеш, с. 140-141; выборка и температура, с. 174-179

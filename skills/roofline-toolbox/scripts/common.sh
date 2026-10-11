@@ -1,4 +1,4 @@
-# Shared helpers for inference-engineer scripts. Source, do not execute.
+# Shared helpers for roofline scripts. Source, do not execute.
 # Contract: INFER_URL is the OpenAI-compatible base URL without /v1.
 # Settings priority: environment (task vars arrive here too) > inference.env in the
 # current directory (or $INFER_ENV_FILE) > defaults. Empty counts as unset.

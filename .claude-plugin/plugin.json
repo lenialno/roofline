@@ -1,12 +1,13 @@
 {
-  "name": "inference-engineer",
-  "description": "Inference Engineer toolkit for on-prem LLM serving: vLLM/SGLang runtime, tool-call parsers, perf and SLO runbooks, Taskfile tasks for gpu/health/metrics/serve/bench",
+  "name": "roofline",
+  "description": "Roofline: Inference Engineer skills for on-prem LLM serving (vLLM/SGLang): runtime, tool-call parsers, perf, SLO incidents, capacity, plus a Taskfile toolbox for gpu/health/metrics/serve/bench",
   "author": {
     "name": "Leonid Konchulizov",
     "email": "mr.konchulizov@gmail.com"
   },
   "license": "MIT",
   "keywords": [
+    "roofline",
     "inference",
     "vllm",
     "sglang",
@@ -16,5 +17,6 @@
     "on-prem"
   ],
   "homepage": "https://gitlab.millennial.ninja/inference-engineer/claude-code-skills",
-  "repository": "ssh://git@gitlab.millennial.ninja:2222/inference-engineer/claude-code-skills.git"
+  "repository": "ssh://git@gitlab.millennial.ninja:2222/inference-engineer/claude-code-skills.git",
+  "displayName": "Roofline"
 }

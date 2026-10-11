@@ -1,11 +1,12 @@
 ---
-name: inference-toolcall
-description: Настроить tool calling и chat template на vLLM/SGLang для Claude Code, Qwen Code и OpenAI-совместимых прокси: выбор --tool-call-parser и --reasoning-parser по семейству модели, проверка шаблона, стриминг tool_calls, make smoke-toolcall. Use when tool calls come back as plain text, arguments are not valid JSON, a client ignores or breaks on tools, the server returns 400 on role tool messages, thinking tags leak into content, or when connecting Claude Code, Qwen Code or a proxy to a local model.
+name: roofline-toolcall-ru
+description: Настроить tool calling и chat template на vLLM/SGLang для Claude Code, Qwen Code и OpenAI-совместимых прокси: выбор --tool-call-parser и --reasoning-parser по семейству модели, проверка шаблона, стриминг tool_calls, make smoke-toolcall. Use when tool calls come back as plain text, arguments are not valid JSON, a client ignores or breaks on tools, the server returns 400 on role tool messages, thinking tags leak into content, or when connecting Claude Code, Qwen Code or a proxy to a local model. Russian-language version; the English skill has the same name without -ru.
+license: MIT
 ---
 
 # Tool calling и chat template
 
-Все `task` ниже: `task -t ${CLAUDE_PLUGIN_ROOT}/Taskfile.yml <задача>` или include этого Taskfile в проектном (`task infer:<задача>`). Переменные `INFER_URL`, `INFER_PROFILE` берутся из окружения, из аргументов (`task serve INFER_PROFILE=x`) или из `inference.env` в текущем каталоге.
+Все `task` ниже: `task -t ${CLAUDE_SKILL_DIR}/../roofline-toolbox/Taskfile.yml <задача>` или include этого Taskfile в проектном (`task infer:<задача>`). Переменные `INFER_URL`, `INFER_PROFILE` берутся из окружения, из аргументов (`task serve INFER_PROFILE=x`) или из `inference.env` в текущем каталоге.
 
 Модель генерирует вызов инструмента текстом в своём формате (Hermes JSON в `<tool_call>`, XML у Qwen3-Coder, `[TOOL_CALLS]` у Mistral). Парсер движка превращает этот текст в OpenAI `tool_calls`. Формат задаёт chat template из `tokenizer_config.json`: он обязан совпадать с форматом обучения (Бурков, с. 164-170, ChatML и роли), иначе никакой парсер не поможет.
 
@@ -36,8 +37,17 @@ Thinking-модели (Qwen3, DeepSeek-R1, GLM-4.5) пишут `<think>` до о
 
 ## Квантование и качество вызовов
 
-Tool calling страдает от квантования первым: аргументы должны быть точным JSON. Порядок предпочтений: bf16, FP8 (Hopper и новее), затем AWQ/GPTQ 4-bit только после `task smoke-toolcall` и своего набора задач. Детали в skill `inference-perf`.
+Tool calling страдает от квантования первым: аргументы должны быть точным JSON. Порядок предпочтений: bf16, FP8 (Hopper и новее), затем AWQ/GPTQ 4-bit только после `task smoke-toolcall` и своего набора задач. Детали в skill `roofline-perf-ru`.
 
 ## Безопасность
 
 Результаты инструментов это внешние данные: инъекция команд через них (Бурков, с. 201-202) исполняется агентом, а не моделью. Движок это не фильтрует; ограничения ставить в клиенте и прокси: allowlist инструментов, подтверждение деструктивных действий.
+
+## Источники
+
+- [vLLM: tool calling](https://docs.vllm.ai/en/latest/features/tool_calling/), [vLLM: reasoning outputs](https://docs.vllm.ai/en/latest/features/reasoning_outputs/)
+- [SGLang: tool parser](https://docs.sglang.ai/advanced_features/tool_parser.html)
+- [Transformers: chat templates](https://huggingface.co/docs/transformers/chat_templating)
+- [Qwen Code](https://github.com/QwenLM/qwen-code), [Claude Code: LLM gateway configuration](https://code.claude.com/docs/en/llm-gateway)
+- roadmap.sh: [AI-Native Applications](https://roadmap.sh/inference-engineering/ai-native-applications@ZqFQmNizkU6ykTMCrmTWf), [Measuring Quality Impact](https://roadmap.sh/inference-engineering/measuring-quality-impact@mK_4R8liXtl64iG7ONvgz)
+- Бурков: ChatML и роли, с. 164-170; джейлбрейк и prompt injection, с. 201-202

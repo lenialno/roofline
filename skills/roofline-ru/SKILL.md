@@ -1,6 +1,7 @@
 ---
-name: inference-engineer
-description: Маршрутизатор роли Inference Engineer для on-prem LLM-serving (vLLM/SGLang, OpenAI-совместимый endpoint, air-gap). Use when the user asks what to do first with a local LLM server, how to approach a serving task, which skill, make target or agent to use, what is inside or outside the inference engineer role, or talks about LLM serving, GPU inference, inference engineering in general terms.
+name: roofline-ru
+description: Маршрутизатор роли Inference Engineer для on-prem LLM-serving (vLLM/SGLang, OpenAI-совместимый endpoint, air-gap). Use when the user asks what to do first with a local LLM server, how to approach a serving task, which skill, make target or agent to use, what is inside or outside the inference engineer role, or talks about LLM serving, GPU inference, inference engineering in general terms. Russian-language version; the English skill has the same name without -ru.
+license: MIT
 ---
 
 # Inference Engineer: с чего начать
@@ -10,21 +11,21 @@ description: Маршрутизатор роли Inference Engineer для on-pr
 ## Первые пять минут
 
 ```bash
-task -t ${CLAUDE_PLUGIN_ROOT}/Taskfile.yml status     # gpu + health + models
-task -t ${CLAUDE_PLUGIN_ROOT}/Taskfile.yml metrics    # очередь, KV, prefix cache, p95
+task -t ${CLAUDE_SKILL_DIR}/../roofline-toolbox/Taskfile.yml status     # gpu + health + models
+task -t ${CLAUDE_SKILL_DIR}/../roofline-toolbox/Taskfile.yml metrics    # очередь, KV, prefix cache, p95
 ```
 
-Нет сервера: skill `inference-runtime`. Сервер есть, но не отвечает или деградировал: `inference-slo-incident`. Всё работает и нужно быстрее: `inference-perf`.
+Нет сервера: skill `roofline-runtime-ru`. Сервер есть, но не отвечает или деградировал: `roofline-incident-ru`. Всё работает и нужно быстрее: `roofline-perf-ru`.
 
 ## Куда идти по запросу
 
 | Запрос | Носитель |
 |---|---|
-| поднять, перезапустить, выбрать vLLM или SGLang, написать профиль | skill `inference-runtime`, `task serve/stop/logs/flags` |
-| tool calls приходят текстом, parser, chat template, подключить Claude Code или Qwen Code | skill `inference-toolcall`, `task smoke-toolcall` |
-| медленно, OOM под нагрузкой, квантование, KV, batching, бенч | skill `inference-perf`, `task bench/vram/metrics` |
-| сервер лежит, очередь, p95 выше SLO, после обновления сломалось | skill `inference-slo-incident`, затем агент `incident-investigator` для долгого разбора логов |
-| сколько GPU, сколько пользователей, план выкатки и отката | skill `inference-capacity`, `task vram` |
+| поднять, перезапустить, выбрать vLLM или SGLang, написать профиль | skill `roofline-runtime-ru`, `task serve/stop/logs/flags` |
+| tool calls приходят текстом, parser, chat template, подключить Claude Code или Qwen Code | skill `roofline-toolcall-ru`, `task smoke-toolcall` |
+| медленно, OOM под нагрузкой, квантование, KV, batching, бенч | skill `roofline-perf-ru`, `task bench/vram/metrics` |
+| сервер лежит, очередь, p95 выше SLO, после обновления сломалось | skill `roofline-incident-ru`, затем агент `incident-investigator` для долгого разбора логов |
+| сколько GPU, сколько пользователей, план выкатки и отката | skill `roofline-capacity-ru`, `task vram` |
 | что умеет GPU прямо сейчас, какие модели подняты | `task gpu`, `task models` |
 
 Агент `incident-investigator` нужен только когда разбор требует читать длинные логи или сравнивать метрики за часы: он работает в своём контексте и возвращает выжимку.
@@ -44,3 +45,10 @@ task -t ${CLAUDE_PLUGIN_ROOT}/Taskfile.yml metrics    # очередь, KV, pref
 - Нет данных по SLO или нагрузке: спросить, не додумывать
 
 Теория, на которую опираются остальные skills (KV-кеш, выборка, chat-формат, перплексия) с номерами страниц книги Буркова: [references/theory-from-burkov.md](references/theory-from-burkov.md).
+
+## Источники
+
+- [roadmap.sh: Inference Engineering](https://roadmap.sh/inference-engineering): карта роли; перевод всех узлов в `docs/roadmap-ru/`
+- [Claude Code: skills](https://code.claude.com/docs/en/skills), [plugins](https://code.claude.com/docs/en/plugins): формат пакета
+- [Agent Skills specification](https://agentskills.io/specification): формат SKILL.md
+- Андрей Бурков, "Языковые модели без лишних слов", БХВ-Петербург, 2026: теория в [references/theory-from-burkov.md](references/theory-from-burkov.md)

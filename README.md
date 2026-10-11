@@ -1,53 +1,83 @@
-# inference-engineer
+# roofline
 
-Claude Code plugin для роли Inference Engineer: on-prem LLM-serving на vLLM или SGLang с OpenAI-совместимым endpoint, клиенты Claude Code и Qwen Code через прокси, air-gap. Шесть skills, один subagent, Taskfile с детерминированными командами. MCP и hooks отсутствуют намеренно: всё live-состояние даёт `task`.
+[По-русски](README.ru.md)
 
-## Установка
+Agent Skills for the Inference Engineer role: on-prem LLM serving with vLLM or SGLang behind an OpenAI-compatible endpoint, clients such as Claude Code and Qwen Code through a proxy, air-gapped hosts. Six knowledge skills in English and in Russian (`-ru` suffix), one toolbox skill with a Taskfile and dependency-free scripts, one Claude Code subagent for incident investigation. The competency map follows [roadmap.sh/inference-engineering](https://roadmap.sh/inference-engineering); every skill lists its sources.
+
+## Skills
+
+| Skill | Job |
+|---|---|
+| `roofline` | role router: what to do first, what is in and out of scope, which skill or task to use |
+| `roofline-runtime` | start and keep vLLM or SGLang: engine choice, flag order, launch profiles, air-gap, startup failures |
+| `roofline-toolcall` | tool calling and chat templates: parser per model family, streaming tool_calls, Claude Code and Qwen Code wiring |
+| `roofline-perf` | metrics and SLO, VRAM and KV cache budget, batching, prefix cache, quantization with a quality protocol, speculative decoding, benchmarking |
+| `roofline-incident` | runbook: triage sequence, OOM variants, queue, p95 breaches, regressions after upgrades, postmortem |
+| `roofline-capacity` | sizing GPUs and TP, concurrency under SLO, replicas, canary rollout and rollback, cost |
+| `roofline-toolbox` | Taskfile and scripts: gpu, health, models, metrics, serve, stop, bench, smoke-toolcall, vram, flags |
+
+Russian versions: the same names with `-ru`. The toolbox is language-neutral and used by both.
+
+## Install
+
+As Agent Skills, for any agent that supports them (Claude Code, Codex, Cursor, OpenCode and others):
 
 ```bash
-claude --plugin-dir /path/to/inference-engineer        # на время сессии
-claude plugin validate /path/to/inference-engineer     # проверка раскладки и frontmatter
+npx skills add <owner>/<repo> --skill roofline-toolbox --skill roofline-runtime   # pick skills
+npx skills add <owner>/<repo> --all                                                 # everything, all agents
+npx skills add <owner>/<repo> -g -a claude-code --skill roofline-toolbox            # user scope, Claude Code only
 ```
 
-Постоянно: добавить каталог в marketplace команды и `claude plugin install inference-engineer@<marketplace>`, либо скопировать `skills/*` в `~/.claude/skills/` (тогда `${CLAUDE_PLUGIN_ROOT}` в текстах заменить на путь к плагину).
+As a Claude Code plugin, in every project on the machine. The repository is its own marketplace:
 
-Skills в сессии: `/inference-engineer:inference-engineer` (маршрутизатор), `inference-runtime`, `inference-toolcall`, `inference-perf`, `inference-slo-incident`, `inference-capacity`. Claude подхватывает их по описанию: "подними vLLM", "tool calls приходят текстом", "почему медленно", "очередь растёт", "сколько GPU нужно".
+```bash
+claude plugin marketplace add <git url or owner/repo>
+claude plugin install roofline@leo-skills
+```
 
-## Taskfile
+Updates: `claude plugin marketplace update leo-skills`, then `claude plugin update roofline@leo-skills` and `/reload-plugins`. A marketplace added from a local clone loads the plugin in place, so edits apply at the next session. For one session only: `claude --plugin-dir /path/to/roofline`.
 
-Нужен [go-task](https://taskfile.dev) (`brew install go-task`). Из любого проекта: `task -t /path/to/inference-engineer/Taskfile.yml <задача>`, либо include в проектный Taskfile.yml:
+Requirements for the toolbox: python3 and curl; [go-task](https://taskfile.dev) for `task`; nvidia-smi for `gpu`. Scripts also run without task.
+
+## Toolbox
+
+From any project, `task -t /path/to/roofline/Taskfile.yml <task>` (the root Taskfile re-exports the toolbox without a namespace), or include it in the project Taskfile:
 
 ```yaml
 version: '3'
 includes:
   infer:
-    taskfile: /path/to/inference-engineer/Taskfile.yml
+    taskfile: /path/to/roofline/skills/roofline-toolbox/Taskfile.yml
 ```
 
-Тогда `task infer:health`. Команды выполняются в каталоге проекта: там лежат `inference.env` (строки `KEY=value`) и `.inference-state/`. Приоритет настроек: аргумент (`task serve INFER_PROFILE=x`), переменная окружения, `inference.env`, значение по умолчанию. Переменные: `INFER_URL` (без `/v1`), `INFER_API_KEY`, `INFER_PROFILE`, `INFER_STATE_DIR`, `SLO_TTFT_P95_MS`, `SLO_TPOT_P95_MS`, `BENCH_N`, `BENCH_C`, `BENCH_IN`, `BENCH_OUT`.
+Commands run in the project directory, where `inference.env` (`KEY=value` lines) and `.inference-state/` live. Setting priority: task variable (`task serve INFER_PROFILE=x`), environment, `inference.env`, default. Variables: `INFER_URL` (no `/v1`), `INFER_API_KEY`, `INFER_PROFILE`, `INFER_STATE_DIR`, `SLO_TTFT_P95_MS`, `SLO_TPOT_P95_MS`, `BENCH_N`, `BENCH_C`, `BENCH_IN`, `BENCH_OUT`.
 
-| Задача | Что делает |
+| Task | What it does |
 |---|---|
-| `gpu` | память, загрузка, процессы по `nvidia-smi` |
-| `health` | `/health`, `/v1/models`, одна короткая генерация с замером |
-| `models` | список моделей и max context |
-| `metrics` | очередь, KV usage, prefix cache hit, preemptions, p50/p95 TTFT и TPOT из `/metrics` |
-| `status` | `gpu` плюс `health` плюс `models` |
-| `serve INFER_PROFILE=<name>` | запуск по профилю из `profiles/`, ожидание `/health`, pid и лог в `.inference-state/` |
-| `stop`, `restart`, `logs` | остановка по pid, перезапуск, хвост лога (`LINES=200 FOLLOW=1`) |
-| `bench` | фиксированный SLO-бенч: `BENCH_N`, `BENCH_C`, `BENCH_IN`, `BENCH_OUT`; `-- --json` для строки JSON; exit 1 при нарушении SLO |
-| `smoke-toolcall` | контракт tool calling: non-stream, stream, отрицательный тест, round trip, parallel |
-| `vram MODEL=/models/x` | бюджет VRAM и KV, concurrency; `GPU_GB`, `TP`, `CTX`, `KV_DTYPE=fp8` |
-| `flags Q=<слово>` | grep по `--help` установленного движка (`RUNTIME=vllm` или `sglang`) |
+| `gpu` | memory, utilization, processes from `nvidia-smi` |
+| `health` | `/health`, `/v1/models`, one short completion with latency |
+| `models` | served model ids and max context |
+| `metrics` | queue, KV usage, prefix-cache hit rate, preemptions, p50/p95 TTFT and TPOT from `/metrics` |
+| `status` | `gpu`, then `health`, then `models` |
+| `serve INFER_PROFILE=<name>` | start from a profile in `profiles/`, wait for `/health`, pid and log in `.inference-state/` |
+| `stop`, `restart`, `logs` | stop by pid, restart, tail the log (`LINES=200 FOLLOW=1`) |
+| `bench` | fixed SLO benchmark: `BENCH_N`, `BENCH_C`, `BENCH_IN`, `BENCH_OUT`; `-- --json` for a JSON line; exit 1 when the SLO is missed |
+| `smoke-toolcall` | tool-calling contract: non-stream, stream, negative prompt, round trip, parallel calls |
+| `vram MODEL=/models/x` | VRAM and KV budget, concurrency; `GPU_GB`, `TP`, `CTX`, `KV_DTYPE=fp8` |
+| `flags Q=<word>` | grep the installed engine's `--help` (`RUNTIME=vllm` or `sglang`) |
 
-Скрипты в `scripts/` на bash и python3 без зависимостей, идемпотентны, ненулевой exit при ошибке. Профили: [profiles/README.md](profiles/README.md).
+Profiles: [skills/roofline-toolbox/profiles/README.md](skills/roofline-toolbox/profiles/README.md).
 
 ## Subagent
 
-`incident-investigator` вызывается skill'ом `inference-slo-incident`, когда разбор требует читать длинные логи или сравнивать метрики за часы. Работает только на чтение (`health`, `metrics`, `gpu`, `logs`, `smoke-toolcall`), возвращает вердикт на 25 строк.
+`incident-investigator` is a Claude Code subagent used by `roofline-incident` when an investigation needs long logs or hours of metrics. It is read-only (`health`, `metrics`, `gpu`, `logs`, `smoke-toolcall`) and returns a 25-line verdict.
 
-## Документы
+## Documents
 
-- [docs/roadmap-ru/](docs/roadmap-ru/README.md): перевод всех 136 узлов roadmap.sh/inference-engineering со ссылками на источники
-- [skills/inference-engineer/references/competency-map.md](skills/inference-engineer/references/competency-map.md): что в роли и что вне, с привязкой к skills
-- [skills/inference-engineer/references/theory-from-burkov.md](skills/inference-engineer/references/theory-from-burkov.md): выжимка из книги Буркова "Языковые модели без лишних слов" с номерами страниц
+- [docs/roadmap-ru/](docs/roadmap-ru/README.md): Russian translation of all 136 nodes of roadmap.sh/inference-engineering with links to the originals
+- [skills/roofline/references/competency-map.md](skills/roofline/references/competency-map.md): which roadmap nodes are in the role and which skill covers them
+- [skills/roofline/references/theory-from-burkov.md](skills/roofline/references/theory-from-burkov.md): serving-relevant facts from Andriy Burkov's "The Hundred-Page Language Models Book" (Russian edition, BHV 2026) with page numbers
+
+## Sources and license
+
+Primary sources: [roadmap.sh: Inference Engineering](https://roadmap.sh/inference-engineering), [vLLM docs](https://docs.vllm.ai/), [SGLang docs](https://docs.sglang.ai/), [Claude Code docs](https://code.claude.com/docs/en/skills), [Agent Skills specification](https://agentskills.io/specification), Andriy Burkov's book. Each skill ends with its own Sources section. MIT license, see [LICENSE](LICENSE).

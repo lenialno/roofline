@@ -1,15 +1,15 @@
 {
-  "name": "inference-engineering",
-  "description": "Inference Engineer plugin for on-prem vLLM/SGLang serving",
+  "name": "leo-skills",
+  "description": "Leo's Claude Code plugins: Roofline (inference engineering)",
   "owner": {
     "name": "Leonid Konchulizov",
     "email": "mr.konchulizov@gmail.com"
   },
   "plugins": [
     {
-      "name": "inference-engineer",
+      "name": "roofline",
       "source": ".",
-      "description": "Skills, incident subagent and Taskfile for on-prem LLM serving: runtime, tool-call parsers, perf, SLO incidents, capacity"
+      "description": "Inference Engineer skills (EN and RU) for on-prem vLLM/SGLang serving with a Taskfile toolbox and an incident subagent"
     }
   ]
 }

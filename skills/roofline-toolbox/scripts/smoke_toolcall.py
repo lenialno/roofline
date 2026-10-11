@@ -134,7 +134,7 @@ def diagnose(content):
     if any(m in c for m in MARKERS):
         return ("model emitted the tool call as text: parser not enabled or wrong parser. "
                 "vLLM: --enable-auto-tool-choice --tool-call-parser <name>; SGLang: --tool-call-parser <name>. "
-                "Pick the parser for this model family (see inference-toolcall skill).")
+                "Pick the parser for this model family (see roofline-toolcall skill).")
     if c.strip():
         return "model answered in prose instead of calling the tool: chat template may lack tool support, or the quantized model lost tool-use quality"
     return "empty content and no tool_calls: check server log for template or parser errors"

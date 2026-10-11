@@ -1,6 +1,7 @@
 ---
-name: inference-slo-incident
-description: Runbook инцидентов LLM-serving на vLLM/SGLang: endpoint не отвечает, CUDA OOM, очередь растёт, TTFT или TPOT p95 выше SLO, preemptions, таймауты клиентов, tool calls сломались после обновления. Use when the server is down or degraded, requests time out, GPU memory is full, latency percentiles spiked, Claude Code or Qwen Code report errors, or to run the triage sequence make health, metrics, gpu, logs.
+name: roofline-incident-ru
+description: Runbook инцидентов LLM-serving на vLLM/SGLang: endpoint не отвечает, CUDA OOM, очередь растёт, TTFT или TPOT p95 выше SLO, preemptions, таймауты клиентов, tool calls сломались после обновления. Use when the server is down or degraded, requests time out, GPU memory is full, latency percentiles spiked, Claude Code or Qwen Code report errors, or to run the triage sequence make health, metrics, gpu, logs. Russian-language version; the English skill has the same name without -ru.
+license: MIT
 ---
 
 # Инцидент: порядок разбора
@@ -10,10 +11,10 @@ description: Runbook инцидентов LLM-serving на vLLM/SGLang: endpoint
 ## Триаж
 
 ```bash
-task -t ${CLAUDE_PLUGIN_ROOT}/Taskfile.yml health      # жив ли endpoint, отвечает ли модель
-task -t ${CLAUDE_PLUGIN_ROOT}/Taskfile.yml metrics     # очередь, KV, preemptions, p95
-task -t ${CLAUDE_PLUGIN_ROOT}/Taskfile.yml gpu         # память, чужие процессы, температура
-task -t ${CLAUDE_PLUGIN_ROOT}/Taskfile.yml logs INFER_PROFILE=<name> LINES=200
+task -t ${CLAUDE_SKILL_DIR}/../roofline-toolbox/Taskfile.yml health      # жив ли endpoint, отвечает ли модель
+task -t ${CLAUDE_SKILL_DIR}/../roofline-toolbox/Taskfile.yml metrics     # очередь, KV, preemptions, p95
+task -t ${CLAUDE_SKILL_DIR}/../roofline-toolbox/Taskfile.yml gpu         # память, чужие процессы, температура
+task -t ${CLAUDE_SKILL_DIR}/../roofline-toolbox/Taskfile.yml logs INFER_PROFILE=<name> LINES=200
 ```
 
 Затем по таблице; полная таблица симптомов в [references/symptoms.md](references/symptoms.md).
@@ -52,3 +53,9 @@ task -t ${CLAUDE_PLUGIN_ROOT}/Taskfile.yml logs INFER_PROFILE=<name> LINES=200
 ## Постмортем
 
 Шаблон: [references/postmortem.md](references/postmortem.md). Поля: таймлайн, симптом, метрики до и после, корневая причина, что изменили, что добавить в `task bench` или smoke, чтобы ловить раньше.
+
+## Источники
+
+- [vLLM: metrics design](https://docs.vllm.ai/en/latest/design/metrics/), [vLLM: troubleshooting](https://docs.vllm.ai/en/latest/usage/troubleshooting/)
+- [SGLang: production metrics](https://docs.sglang.ai/references/production_metrics.html)
+- roadmap.sh: [Observability](https://roadmap.sh/inference-engineering/observability@w-dVv5dFNxD7Rqy16m4uL), [Request Queueing](https://roadmap.sh/inference-engineering/request-queueing@k-zXOGynI0B0yyT-n3raa), [Continuous Batching](https://roadmap.sh/inference-engineering/continuous-batching@h_PDOMA-V-n7Pab3epuP3), [Zero-Downtime Deployment](https://roadmap.sh/inference-engineering/zero-downtime-deplo@le4sPQ0h9l-vlmCB4G8ZY)
