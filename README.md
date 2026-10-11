@@ -3,7 +3,7 @@
   <img alt="roofline" src="brand/png/readme-header-light-1200x400-2x.png" width="1200">
 </picture>
 
-<img src="assets/lenialno-icon.svg" alt="Lenialno" height="22" align="top"> Roofline, a Lenialno product line. [По-русски](README.ru.md)
+<img src="assets/lenialno-icon.svg" alt="Lenialno" height="22" align="top"> Roofline, a Lenialno product line. [По-русски](README.ru.md) [![skills.sh](https://skills.sh/b/lenialno/roofline)](https://skills.sh/lenialno/roofline)
 
 Agent Skills for the Inference Engineer role: run vLLM or SGLang on your own GPUs behind an OpenAI-compatible endpoint, serve Claude Code and Qwen Code through a proxy, stay healthy on air-gapped hosts. 13 skills, one Claude Code subagent and a [Taskfile](https://taskfile.dev/) toolbox; the competency map follows [roadmap.sh/inference-engineering](https://roadmap.sh/inference-engineering).
 
