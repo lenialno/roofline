@@ -1,6 +1,6 @@
 ---
 name: roofline-capacity-ru
-description: Спроектировать on-prem LLM-serving под нагрузку и безопасно выкатить: расчёт GPU, VRAM и TP под модель и контекст, concurrency под SLO, число реплик, выбор модели под evals, план canary-выкатки и отката, фиксация версий, перенос весов в air-gap. Use when asked how many GPUs are needed, which model fits the hardware, how many concurrent Claude Code or Qwen Code users a server handles, how to roll out a new model or runtime version safely, or to estimate cost of dedicated inference. Russian-language version; the English skill has the same name without -ru.
+description: "Спроектировать on-prem LLM-serving под нагрузку и безопасно выкатить: расчёт GPU, VRAM и TP под модель и контекст, concurrency под SLO, число реплик, выбор модели под evals, план canary-выкатки и отката, фиксация версий, перенос весов в air-gap. Use when asked how many GPUs are needed, which model fits the hardware, how many concurrent Claude Code or Qwen Code users a server handles, how to roll out a new model or runtime version safely, or to estimate cost of dedicated inference. Russian-language version; the English skill has the same name without -ru."
 license: MIT
 ---
 

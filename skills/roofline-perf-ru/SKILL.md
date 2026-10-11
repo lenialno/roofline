@@ -1,6 +1,6 @@
 ---
 name: roofline-perf-ru
-description: Ускорить и измерить LLM-инференс на vLLM/SGLang: бюджет VRAM и KV-кеша, continuous batching, prefix/radix cache, квантование (FP8, AWQ, GPTQ, fp8 KV) и его цена для tool calling, спекулятивное декодирование, TTFT/TPOT/p95, методика бенча (make bench, make vram, make metrics). Use when asked why the server is slow, how to raise throughput or concurrency, which quantization to pick, how to size the KV cache, tune max-num-seqs, max-num-batched-tokens or max-model-len, or how to run and read a benchmark. Russian-language version; the English skill has the same name without -ru.
+description: "Ускорить и измерить LLM-инференс на vLLM/SGLang: бюджет VRAM и KV-кеша, continuous batching, prefix/radix cache, квантование (FP8, AWQ, GPTQ, fp8 KV) и его цена для tool calling, спекулятивное декодирование, TTFT/TPOT/p95, методика бенча (make bench, make vram, make metrics). Use when asked why the server is slow, how to raise throughput or concurrency, which quantization to pick, how to size the KV cache, tune max-num-seqs, max-num-batched-tokens or max-model-len, or how to run and read a benchmark. Russian-language version; the English skill has the same name without -ru."
 license: MIT
 ---
 

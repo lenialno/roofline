@@ -1,8 +1,8 @@
 ---
 name: roofline-toolbox
-description: Operations toolbox for a local vLLM or SGLang server with an OpenAI-compatible API. Taskfile tasks and dependency-free scripts for gpu, health, models, metrics (queue, KV cache, prefix-cache hit rate, TTFT/TPOT p95), serve and stop by named profile, fixed SLO benchmark, tool-calling smoke test, VRAM budget from config.json, runtime flag lookup. Use when asked to check, start, stop, benchmark or probe a local LLM server, or when another roofline-* skill says to run a task.
+description: "Operations toolbox for a local vLLM or SGLang server with an OpenAI-compatible API. Taskfile tasks and dependency-free scripts for gpu, health, models, metrics (queue, KV cache, prefix-cache hit rate, TTFT/TPOT p95), serve and stop by named profile, fixed SLO benchmark, tool-calling smoke test, VRAM budget from config.json, runtime flag lookup. Use when asked to check, start, stop, benchmark or probe a local LLM server, or when another roofline-* skill says to run a task."
 license: MIT
-compatibility: Requires python3 and curl; go-task (task) for the Taskfile, nvidia-smi for the gpu task
+compatibility: "Requires python3 and curl; go-task (task) for the Taskfile, nvidia-smi for the gpu task"
 ---
 
 # Inference toolbox

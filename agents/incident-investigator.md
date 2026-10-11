@@ -1,6 +1,6 @@
 ---
 name: incident-investigator
-description: Investigates an LLM-serving incident (vLLM or SGLang) in an isolated context. Reads long runtime logs, runs the toolbox health, metrics and gpu tasks, checks competing hypotheses and returns a short verdict with the root cause and the next action. Use for long logs, incidents spanning hours, or several hypotheses, so the main conversation receives only the summary. Also used for Russian requests about инцидент, OOM, очередь, p95.
+description: "Investigates an LLM-serving incident (vLLM or SGLang) in an isolated context. Reads long runtime logs, runs the toolbox health, metrics and gpu tasks, checks competing hypotheses and returns a short verdict with the root cause and the next action. Use for long logs, incidents spanning hours, or several hypotheses, so the main conversation receives only the summary. Also used for Russian requests about инцидент, OOM, очередь, p95."
 tools: Bash, Read, Grep, Glob
 model: inherit
 ---

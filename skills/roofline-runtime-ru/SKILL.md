@@ -1,6 +1,6 @@
 ---
 name: roofline-runtime-ru
-description: Поднять vLLM или SGLang on-prem и держать его в порядке: выбор движка, порядок флагов, профили запуска, air-gap, docker, make serve/stop/logs/flags. Use when asked to start, launch, configure, restart or stop a vLLM or SGLang server, choose between vLLM and SGLang, write a launch profile, set tensor parallel, max-model-len, gpu-memory-utilization, or when the server fails to start (OOM at load, port busy, unsupported model, missing tokenizer). Russian-language version; the English skill has the same name without -ru.
+description: "Поднять vLLM или SGLang on-prem и держать его в порядке: выбор движка, порядок флагов, профили запуска, air-gap, docker, make serve/stop/logs/flags. Use when asked to start, launch, configure, restart or stop a vLLM or SGLang server, choose between vLLM and SGLang, write a launch profile, set tensor parallel, max-model-len, gpu-memory-utilization, or when the server fails to start (OOM at load, port busy, unsupported model, missing tokenizer). Russian-language version; the English skill has the same name without -ru."
 license: MIT
 ---
 
