@@ -5,7 +5,7 @@
 
 # Roofline
 
-<img src="assets/lenialno.svg" alt="Lenialno" height="18" align="top"> Roofline, линейка Lenialno. [English](README.md)
+<img src="assets/lenialno-icon.svg" alt="Lenialno" height="22" align="top"> Roofline, линейка Lenialno. [English](README.md)
 
 [![skills.sh](https://skills.sh/b/lenialno/roofline)](https://skills.sh/lenialno/roofline)
 
