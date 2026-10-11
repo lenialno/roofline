@@ -82,7 +82,7 @@ Profiles: [skills/roofline-toolbox/profiles/README.md](skills/roofline-toolbox/p
 
 ## Documents
 
-- [docs/roadmap-ru/](docs/roadmap-ru/README.md): Russian translation of all 136 nodes of roadmap.sh/inference-engineering with links to the originals
+- [docs/roadmap-ru/](docs/roadmap-ru/README.md): Russian translation of all 136 nodes of roadmap.sh/inference-engineering with links to the originals. One deliberate deviation: the node Writing Custom Kernels is adapted to Rust (cudarc, CubeCL, Rust-CUDA) instead of C++ and Triton, and the competency map follows the same choice
 - [skills/roofline/references/competency-map.md](skills/roofline/references/competency-map.md): which roadmap nodes are in the role and which skill covers them
 - [skills/roofline/references/theory-from-burkov.md](skills/roofline/references/theory-from-burkov.md): serving-relevant facts from Andriy Burkov's "The Hundred-Page Language Models Book" (Russian edition, BHV 2026) with page numbers
 

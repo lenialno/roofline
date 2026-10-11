@@ -82,7 +82,7 @@ includes:
 
 ## Документы
 
-- [docs/roadmap-ru/](docs/roadmap-ru/README.md): перевод всех 136 узлов roadmap.sh/inference-engineering со ссылками на источники
+- [docs/roadmap-ru/](docs/roadmap-ru/README.md): перевод всех 136 узлов roadmap.sh/inference-engineering со ссылками на источники. Одно сознательное отличие от оригинала: узел Writing Custom Kernels адаптирован под Rust (cudarc, CubeCL, Rust-CUDA) вместо C++ и Triton, карта компетенций следует тому же выбору
 - [skills/roofline-ru/references/competency-map.md](skills/roofline-ru/references/competency-map.md): что в роли и что вне, с привязкой к skills
 - [skills/roofline-ru/references/theory-from-burkov.md](skills/roofline-ru/references/theory-from-burkov.md): выжимка из книги Буркова "Языковые модели без лишних слов" с номерами страниц
 
