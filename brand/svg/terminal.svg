@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="452" viewBox="0 0 760 452" role="img" aria-label="Terminal: task prints the Roofline mark and the task list">
+  <defs>
+    <style>
+      .win { fill: #0E0E0F; stroke: #2A2A2D; stroke-width: 1; }
+      .bar { fill: #151517; }
+      .dot { fill: #2E2E31; }
+      .t { font-family: "Geist Mono", "SF Mono", Menlo, Consolas, "DejaVu Sans Mono", monospace; font-size: 15px; fill: #ECEAE6; white-space: pre; }
+      .muted { fill: #8A8986; }
+      .accent { fill: #D25C55; }
+      .title { font-family: "Geist", "Inter", -apple-system, "Segoe UI", sans-serif; font-size: 12px; fill: #8A8986; }
+    </style>
+  </defs>
+  <rect class="win" x="0.5" y="0.5" width="759" height="451" rx="10" ry="10"/>
+  <path class="bar" d="M0.5 10.5a10 10 0 0 1 10-10h739a10 10 0 0 1 10 10v25.5H0.5z"/>
+  <circle class="dot" cx="20" cy="18" r="5"/>
+  <circle class="dot" cx="38" cy="18" r="5"/>
+  <circle class="dot" cx="56" cy="18" r="5"/>
+  <text class="title" x="380" y="22" text-anchor="middle">roofline</text>
+  <g xml:space="preserve">
+    <text class="t" x="24" y="68"><tspan class="muted">$ </tspan>task</text>
+    <text class="t" x="24" y="100">    __________</text>
+    <text class="t" x="24" y="124"><tspan class="accent">   /</tspan></text>
+    <text class="t" x="24" y="148"><tspan class="accent">  /</tspan></text>
+    <text class="t" x="24" y="172"><tspan class="accent"> /</tspan>   Roofline</text>
+    <text class="t muted" x="24" y="220">task: Available tasks for this project:</text>
+    <text class="t" x="24" y="244"><tspan class="muted">* </tspan>health          <tspan class="muted">endpoint liveness: /health, /v1/models, one short completion</tspan></text>
+    <text class="t" x="24" y="268"><tspan class="muted">* </tspan>metrics         <tspan class="muted">queue, KV cache usage, prefix-cache hit, TTFT/TPOT p50/p95</tspan></text>
+    <text class="t" x="24" y="292"><tspan class="muted">* </tspan>serve           <tspan class="muted">start the runtime from a named profile</tspan></text>
+    <text class="t" x="24" y="316"><tspan class="muted">* </tspan>smoke-toolcall  <tspan class="muted">tool-calling contract: tool_calls, JSON args, streaming</tspan></text>
+    <text class="t" x="24" y="340"><tspan class="muted">* </tspan>bench           <tspan class="muted">fixed SLO bench: p50/p95 TTFT, TPOT, e2e; exit 1 if SLO missed</tspan></text>
+    <text class="t" x="24" y="364"><tspan class="muted">* </tspan>vram            <tspan class="muted">VRAM and KV budget from config.json, concurrency</tspan></text>
+    <text class="t" x="24" y="388"><tspan class="muted">* </tspan>gpu, models, profiles, status, stop, restart, logs, flags</text>
+    <text class="t" x="24" y="428"><tspan class="muted">$ </tspan><tspan class="accent">▍</tspan></text>
+  </g>
+</svg>

@@ -51,4 +51,4 @@ task -t ${CLAUDE_SKILL_DIR}/../roofline-toolbox/Taskfile.yml metrics    # оче
 - [roadmap.sh: Inference Engineering](https://roadmap.sh/inference-engineering): карта роли; перевод всех узлов в `docs/roadmap-ru/`
 - [Claude Code: skills](https://code.claude.com/docs/en/skills), [plugins](https://code.claude.com/docs/en/plugins): формат пакета
 - [Agent Skills specification](https://agentskills.io/specification): формат SKILL.md
-- Андрей Бурков, "Языковые модели без лишних слов", БХВ-Петербург, 2026: теория в [references/theory-from-burkov.md](references/theory-from-burkov.md)
+- Андрей Бурков, "Языковые модели без лишних слов", БХВ-Петербург, 2026 ([купить на Ozon](https://www.ozon.ru/product/yazykovye-modeli-bez-lishnih-slov-burkov-andrey-4678629427/?at=1iao1Xu0NlUIcfcFRZUKWGxeT6SFLpfc&sh=YcvAR88O_Q)): теория в [references/theory-from-burkov.md](references/theory-from-burkov.md)
