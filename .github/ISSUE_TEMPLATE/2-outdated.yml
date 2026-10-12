@@ -1,0 +1,39 @@
+name: Outdated parser, flag or metric
+description: task doctor or your engine shows that a name in the tables no longer matches your vLLM or SGLang version
+labels: ["outdated"]
+title: "outdated: <engine> <version>: <parser, flag or metric>"
+body:
+  - type: markdown
+    attributes:
+      value: Remove internal hostnames and paths from the output before posting.
+  - type: dropdown
+    id: runtime
+    attributes:
+      label: Engine
+      options: [vLLM, SGLang]
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Engine version
+      placeholder: "0.31.0"
+    validations:
+      required: true
+  - type: input
+    id: model
+    attributes:
+      label: Model
+      placeholder: "moonshotai/Kimi-K3"
+  - type: textarea
+    id: doctor
+    attributes:
+      label: Output of task doctor
+      render: text
+    validations:
+      required: true
+  - type: textarea
+    id: fix
+    attributes:
+      label: What works instead
+      description: The parser name, flag or metric that works on your version, if you found it.

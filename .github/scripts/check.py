@@ -64,7 +64,7 @@ print("skills: %d found" % len(names))
 
 prose_files = sorted(set(
     glob.glob("skills/*/SKILL.md") + glob.glob("skills/*/references/*.md") + glob.glob("skills/*/profiles/README.md")
-    + glob.glob("agents/*.md") + glob.glob("docs/roadmap-ru/*.md") + ["README.md", "README.ru.md"]
+    + glob.glob("agents/*.md") + glob.glob("docs/roadmap-ru/*.md") + ["README.md", "README.ru.md", "CONTRIBUTING.md", "CONTRIBUTING.ru.md", ".github/PULL_REQUEST_TEMPLATE.md"]
 ))
 for path in prose_files:
     text = open(path, encoding="utf-8").read()

@@ -28,6 +28,15 @@ jobs:
           version: 3.x
           repo-token: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Pull request title (Conventional Commits, see CONTRIBUTING.md)
+        if: github.event_name == 'pull_request'
+        env:
+          TITLE: ${{ github.event.pull_request.title }}
+        run: |
+          echo "$TITLE"
+          echo "$TITLE" | grep -qE '^(feat|fix|docs|ci|chore)(\([a-z0-9-]+(, ?[a-z0-9-]+)*\))?!?: [^ ].{0,70}[^.]$' \
+            || { echo "title must look like 'fix(toolcall): kimi_k3 parser name', see CONTRIBUTING.md"; exit 1; }
+
       - name: Repository checks (skills, typography, links)
         run: python3 .github/scripts/check.py
 

@@ -1,0 +1,25 @@
+name: Proposal
+description: A new skill, task, model family or launch profile
+labels: ["enhancement", "needs triage"]
+body:
+  - type: markdown
+    attributes:
+      value: Open a proposal before a large pull request, so the work is agreed before it is done.
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: What an inference engineer cannot do today, and how they work around it.
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposal
+      description: What to add or change. For a profile: model, engine, GPU, and the output of task vram.
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered

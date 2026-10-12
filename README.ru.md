@@ -223,6 +223,10 @@ qwen3-coder-30b-a3b-sglang
 - [skills/roofline-ru/references/competency-map.md](skills/roofline-ru/references/competency-map.md): какие узлы карты входят в роль и какой skill их покрывает
 - [skills/roofline-ru/references/theory-from-burkov.md](skills/roofline-ru/references/theory-from-burkov.md): факты для serving из книги Андрея Буркова "Языковые модели без лишних слов" с номерами страниц ([Ozon](https://www.ozon.ru/product/yazykovye-modeli-bez-lishnih-slov-burkov-andrey-4678629427/))
 
+## Как участвовать
+
+Ошибки, устаревшие имена парсеров и предложения: в [CONTRIBUTING.ru.md](CONTRIBUTING.ru.md) шаблоны issues, локальные проверки и правила коммитов.
+
 ## Источники
 
 [roadmap.sh: Inference Engineering](https://roadmap.sh/inference-engineering), [документация vLLM](https://docs.vllm.ai/), [документация SGLang](https://docs.sglang.ai/), [документация Claude Code](https://code.claude.com/docs/en/skills), [спецификация Agent Skills](https://agentskills.io/specification), книга Андрея Буркова ([Ozon](https://www.ozon.ru/product/yazykovye-modeli-bez-lishnih-slov-burkov-andrey-4678629427/)). Каждый skill заканчивается своим разделом "Источники". Файлы бренда с правилами цвета и геометрии: [brand/BRAND.md](brand/BRAND.md); знак для терминала в [brand/ascii.txt](brand/ascii.txt). Лицензия MIT, см. [LICENSE](LICENSE).
