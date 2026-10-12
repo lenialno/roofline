@@ -1,0 +1,40 @@
+name: Bug
+description: A task or script fails, or a skill gives advice that does not work
+labels: ["bug", "needs triage"]
+body:
+  - type: markdown
+    attributes:
+      value: Search the open issues first. Remove internal hostnames, paths, keys and prompts from any output you paste.
+  - type: input
+    id: where
+    attributes:
+      label: Skill or task
+      placeholder: "task smoke-toolcall, roofline-perf"
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: What happened
+      description: The command you ran and its output.
+      render: text
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: What you expected
+    validations:
+      required: true
+  - type: input
+    id: env
+    attributes:
+      label: Engine, version, model, GPU
+      placeholder: "vLLM 0.31.0, Qwen/Qwen3-32B-FP8, 2x H100 80GB"
+    validations:
+      required: true
+  - type: input
+    id: worked
+    attributes:
+      label: Last version where it worked
+      placeholder: "commit or date, or unknown"

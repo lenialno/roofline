@@ -1,0 +1,18 @@
+name: Documentation
+description: Missing or wrong text in a skill, README or the roadmap-ru translation
+labels: ["documentation"]
+body:
+  - type: input
+    id: file
+    attributes:
+      label: File or link
+      placeholder: "skills/roofline-perf/SKILL.md, docs/roadmap-ru/04-hardware.md"
+    validations:
+      required: true
+  - type: textarea
+    id: problem
+    attributes:
+      label: What is wrong or missing
+      description: Quote the current text and say what it should be. For EN and RU pairs, name both if both are affected.
+    validations:
+      required: true

@@ -223,6 +223,10 @@ qwen3-coder-30b-a3b-sglang
 - [skills/roofline/references/competency-map.md](skills/roofline/references/competency-map.md): which roadmap nodes are in the role and which skill covers them.
 - [skills/roofline/references/theory-from-burkov.md](skills/roofline/references/theory-from-burkov.md): serving-relevant facts from Andriy Burkov's "The Hundred-Page Language Models Book" with page numbers (Russian edition, [Ozon](https://www.ozon.ru/product/yazykovye-modeli-bez-lishnih-slov-burkov-andrey-4678629427/)).
 
+## Contributing
+
+Bugs, outdated parser names and proposals: [CONTRIBUTING.md](CONTRIBUTING.md) has the issue templates, local checks and commit rules.
+
 ## Sources
 
 [roadmap.sh: Inference Engineering](https://roadmap.sh/inference-engineering), [vLLM docs](https://docs.vllm.ai/), [SGLang docs](https://docs.sglang.ai/), [Claude Code docs](https://code.claude.com/docs/en/skills), [Agent Skills specification](https://agentskills.io/specification), Andriy Burkov's book ([Ozon](https://www.ozon.ru/product/yazykovye-modeli-bez-lishnih-slov-burkov-andrey-4678629427/)). Each skill ends with its own Sources section. Brand files with the colour and geometry rules: [brand/BRAND.md](brand/BRAND.md); terminal mark in [brand/ascii.txt](brand/ascii.txt). MIT license, see [LICENSE](LICENSE).

@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: How to install and use Roofline
+    url: https://github.com/lenialno/roofline#readme
+    about: Install commands, task list and examples are in the README.
