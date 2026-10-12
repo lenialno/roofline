@@ -18,7 +18,7 @@ import sys
 import urllib.request
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-ISSUE_URL = "https://github.com/lenialno/roofline/issues/new?template=mismatch.yml"
+ISSUE_URL = "https://github.com/lenialno/roofline/issues/new?template=2-outdated.yml"
 
 # parser registries inside the installed package, newest layout first
 REGISTRIES = {
