@@ -15,7 +15,7 @@ Names change between versions. Before use: `task flags Q=<fragment>` (RUNTIME=vl
 | Tokens per batch step | `--max-num-batched-tokens` | `--chunked-prefill-size` (and `--max-prefill-tokens`) |
 | Chunked prefill | `--enable-chunked-prefill` (on by default in V1) | `--chunked-prefill-size N` (`-1` disables) |
 | Prefix cache | `--enable-prefix-caching` / `--no-enable-prefix-caching` | on; `--disable-radix-cache` turns it off |
-| Weight quantization | `--quantization fp8\|awq\|gptq\|compressed-tensors` (often detected from config) | `--quantization fp8\|awq\|gptq\|...` |
+| Weight quantization | `--quantization fp8\|awq\|gptq\|compressed-tensors` (often detected from config; since vLLM 0.31 online quantization via `fp8` redirects to `fp8_per_tensor`) | `--quantization fp8\|awq\|gptq\|...` |
 | KV in FP8 | `--kv-cache-dtype fp8` | `--kv-cache-dtype fp8_e5m2\|fp8_e4m3` |
 | Tool calling | `--enable-auto-tool-choice --tool-call-parser <name>` | `--tool-call-parser <name>` |
 | Reasoning (thinking) | `--reasoning-parser <name>` | `--reasoning-parser <name>` |

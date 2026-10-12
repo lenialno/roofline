@@ -15,7 +15,7 @@
 | Токенов в одном шаге батча | `--max-num-batched-tokens` | `--chunked-prefill-size` (и `--max-prefill-tokens`) |
 | Chunked prefill | `--enable-chunked-prefill` (по умолчанию включён в V1) | `--chunked-prefill-size N` (`-1` выключает) |
 | Prefix cache | `--enable-prefix-caching` / `--no-enable-prefix-caching` | включён; `--disable-radix-cache` выключает |
-| Квантование весов | `--quantization fp8\|awq\|gptq\|compressed-tensors` (часто определяется из config) | `--quantization fp8\|awq\|gptq\|...` |
+| Квантование весов | `--quantization fp8\|awq\|gptq\|compressed-tensors` (часто определяется из config; с vLLM 0.31 онлайн-квантование через `fp8` перенаправляется в `fp8_per_tensor`) | `--quantization fp8\|awq\|gptq\|...` |
 | KV в FP8 | `--kv-cache-dtype fp8` | `--kv-cache-dtype fp8_e5m2\|fp8_e4m3` |
 | Tool calling | `--enable-auto-tool-choice --tool-call-parser <name>` | `--tool-call-parser <name>` |
 | Reasoning (thinking) | `--reasoning-parser <name>` | `--reasoning-parser <name>` |
