@@ -14,7 +14,7 @@ license: MIT
 
 1. Семейство модели: `config.json` (`architectures`, `model_type`) и README весов
 2. Шаблон поддерживает инструменты: в `tokenizer_config.json` поле `chat_template` содержит `tools`; нет его: взять шаблон из репозитория модели или движка (`--chat-template`), не писать свой
-3. Парсеры по таблице в [references/parsers.md](references/parsers.md); имя проверить: `task flags Q=tool-call-parser`
+3. Парсеры по таблице в [references/parsers.md](references/parsers.md); имя проверить: `task flags Q=tool-call-parser`. После обновления движка `task doctor` сверяет все имена таблицы с установленной версией
 4. В профиль: vLLM `--enable-auto-tool-choice --tool-call-parser <p> [--reasoning-parser <r>]`; SGLang `--tool-call-parser <p> [--reasoning-parser <r>]`
 5. `task serve`, затем `task smoke-toolcall`: non-stream, stream, отрицательный тест, round trip с ролью tool, параллельные вызовы
 6. Подключить клиента по [references/clients.md](references/clients.md) и прогнать реальную задачу (прочитать файл, сделать правку)

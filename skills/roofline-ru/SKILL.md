@@ -41,6 +41,7 @@ task -t ${CLAUDE_SKILL_DIR}/../roofline-toolbox/Taskfile.yml metrics    # оче
 - Сначала измерить, потом менять: `task metrics` и `task bench` до и после, одна переменная за раз
 - Флаги брать с установленной версии: `task flags Q=<слово>`, не из памяти
 - После любого изменения конфигурации: `task health`, `task smoke-toolcall`, `task bench`
+- После обновления движка: `task doctor`
 - Профили запуска только из `profiles/`; произвольные команды сервера через Taskfile не выполняются
 - Нет данных по SLO или нагрузке: спросить, не додумывать
 

@@ -1,0 +1,21 @@
+name: drift
+
+# Weekly: the parser table against the parser registries of the latest vLLM and SGLang releases.
+# A red run means a release renamed or dropped a parser that skills/roofline-toolcall/references/parsers.md lists.
+on:
+  schedule:
+    - cron: "0 6 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  drift:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Parser table against latest releases
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: .github/scripts/drift.sh

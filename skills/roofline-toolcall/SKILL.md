@@ -14,7 +14,7 @@ The model emits a tool call as text in its own format (Hermes JSON inside `<tool
 
 1. Model family: `config.json` (`architectures`, `model_type`) and the README of the weights
 2. The template supports tools: the `chat_template` field in `tokenizer_config.json` mentions `tools`; if it does not, take the template from the model repo or the engine (`--chat-template`), do not write your own
-3. Parsers from the table in [references/parsers.md](references/parsers.md); confirm the name: `task flags Q=tool-call-parser`
+3. Parsers from the table in [references/parsers.md](references/parsers.md); confirm the name: `task flags Q=tool-call-parser`. After an engine upgrade `task doctor` checks every name in the table against the installed version
 4. Into the profile: vLLM `--enable-auto-tool-choice --tool-call-parser <p> [--reasoning-parser <r>]`; SGLang `--tool-call-parser <p> [--reasoning-parser <r>]`
 5. `task serve`, then `task smoke-toolcall`: non-stream, stream, negative test, round trip with the tool role, parallel calls
 6. Connect the client per [references/clients.md](references/clients.md) and run a real task (read a file, make an edit)
