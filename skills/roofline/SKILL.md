@@ -41,6 +41,7 @@ Out of scope: training and research, fine-tuning and distillation as the main jo
 - Measure first, then change: `task metrics` and `task bench` before and after, one variable at a time
 - Take flags from the installed version: `task flags Q=<word>`, not from memory
 - After any configuration change: `task health`, `task smoke-toolcall`, `task bench`
+- After an engine upgrade: `task doctor`
 - Launch profiles come only from `profiles/`; the Taskfile does not run arbitrary server commands
 - No SLO or load data: ask, do not guess
 

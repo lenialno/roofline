@@ -53,6 +53,8 @@ env:
   FOLLOW: '{{.FOLLOW}}'
   RUNTIME: '{{.RUNTIME}}'
   Q: '{{.Q}}'
+  PARSERS_MD: '{{.PARSERS_MD}}'
+  DOCTOR_SMOKE: '{{.DOCTOR_SMOKE}}'
 
 tasks:
   default:
@@ -137,6 +139,12 @@ tasks:
     dir: '{{.USER_WORKING_DIR}}'
     cmds:
       - python3 -I "{{.SCRIPTS}}/smoke_toolcall.py" {{.CLI_ARGS}}
+
+  doctor:
+    desc: 'tables against the installed engine: version, parser names, /metrics series, then smoke-toolcall'
+    dir: '{{.USER_WORKING_DIR}}'
+    cmds:
+      - python3 -I "{{.SCRIPTS}}/doctor.py"
 
   vram:
     desc: 'VRAM budget from a model dir: task vram MODEL=/models/x GPU_GB=80 TP=1 CTX=32768 KV_DTYPE=fp8'

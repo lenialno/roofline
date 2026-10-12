@@ -92,6 +92,7 @@ includes:
 | `stop`, `restart`, `logs` | остановка по pid (без профиля: все), остановка и запуск, хвост лога (`LINES=200 FOLLOW=1`) |
 | `bench` | фиксированный SLO-бенч: `BENCH_N`, `BENCH_C`, `BENCH_IN`, `BENCH_OUT`; `-- --json` для строки JSON; exit 1 при нарушении SLO |
 | `smoke-toolcall` | контракт tool calling: non-stream, stream, отрицательный промпт, round trip, параллельные вызовы |
+| `doctor` | после обновления движка: имена парсеров и серии `/metrics` против установленной версии, затем `smoke-toolcall`; при расхождении печатает ссылку на issue |
 | `vram MODEL=/models/x` | бюджет VRAM и KV, concurrency из `config.json`; `GPU_GB`, `TP`, `CTX`, `KV_DTYPE=fp8` |
 | `flags Q=<слово>` | grep по `--help` установленного движка (`RUNTIME=vllm` или `sglang`) |
 
@@ -131,6 +132,7 @@ includes:
 
 task: Available tasks for this project:
 * bench:                fixed SLO bench: BENCH_N BENCH_C BENCH_IN BENCH_OUT; p50/p95 TTFT/TPOT/e2e; exit 1 if SLO missed
+* doctor:               tables against the installed engine: version, parser names, /metrics series, then smoke-toolcall
 * health:               endpoint liveness: /health, /v1/models, one short completion
 * metrics:              key Prometheus series: running, waiting, KV usage, prefix-cache hit, TTFT/TPOT p50/p95
 * serve:                start the runtime from a named profile: task serve INFER_PROFILE=<name>

@@ -92,6 +92,7 @@ Commands run in the directory you call `task` from, where `inference.env` (`KEY=
 | `stop`, `restart`, `logs` | stop by pid (no profile means all), stop then serve, tail the log (`LINES=200 FOLLOW=1`) |
 | `bench` | fixed SLO benchmark: `BENCH_N`, `BENCH_C`, `BENCH_IN`, `BENCH_OUT`; `-- --json` for a JSON line; exit 1 when the SLO is missed |
 | `smoke-toolcall` | tool-calling contract: non-stream, stream, negative prompt, round trip, parallel calls |
+| `doctor` | after an engine upgrade: parser names and `/metrics` series against the installed version, then `smoke-toolcall`; prints an issue link on a mismatch |
 | `vram MODEL=/models/x` | VRAM and KV budget, concurrency from `config.json`; `GPU_GB`, `TP`, `CTX`, `KV_DTYPE=fp8` |
 | `flags Q=<word>` | grep the installed engine's `--help` (`RUNTIME=vllm` or `sglang`) |
 
@@ -131,6 +132,7 @@ Real output, captured on 2026-10-11 on a laptop without a GPU. Tasks that need a
 
 task: Available tasks for this project:
 * bench:                fixed SLO bench: BENCH_N BENCH_C BENCH_IN BENCH_OUT; p50/p95 TTFT/TPOT/e2e; exit 1 if SLO missed
+* doctor:               tables against the installed engine: version, parser names, /metrics series, then smoke-toolcall
 * health:               endpoint liveness: /health, /v1/models, one short completion
 * metrics:              key Prometheus series: running, waiting, KV usage, prefix-cache hit, TTFT/TPOT p50/p95
 * serve:                start the runtime from a named profile: task serve INFER_PROFILE=<name>

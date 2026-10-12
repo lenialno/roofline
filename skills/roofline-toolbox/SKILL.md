@@ -31,6 +31,7 @@ Without go-task, call the scripts directly with the same environment variables: 
 | `restart`, `logs LINES=200 FOLLOW=1` | stop then serve; tail the profile log | |
 | `bench BENCH_N=32 BENCH_C=8 BENCH_IN=2048 BENCH_OUT=256` | N streaming requests at concurrency C with a fixed prompt, `temperature 0`, `ignore_eos`; p50/p95/p99 TTFT, TPOT, e2e; total tokens/s; `-- --json` adds a JSON line | p95 TTFT and TPOT within `SLO_TTFT_P95_MS` and `SLO_TPOT_P95_MS`, zero errors |
 | `smoke-toolcall` | non-stream call, streamed deltas, negative prompt, tool-result round trip, parallel calls (informational); diagnoses parser and template problems | required checks passed |
+| `doctor` | installed vLLM or SGLang version against the version `roofline-toolcall/references/parsers.md` was checked with; every parser name in that table against the installed parser registry (read as text, nothing is imported or loaded); when the endpoint is up, core `/metrics` series and `smoke-toolcall`; `DOCTOR_SMOKE=0` skips the smoke | names, series and smoke all match |
 | `vram MODEL=/models/x GPU_GB=80 TP=2 CTX=65536 KV_DTYPE=fp8` | weights from safetensors sizes, KV bytes per token (GQA and MLA aware), tokens in flight, concurrency, suggested `--max-model-len` and `--max-num-seqs` | weights fit |
 | `flags Q=tool-call RUNTIME=vllm` | grep the installed runtime's `--help`, so flag names come from the installed version | match found |
 
@@ -59,6 +60,7 @@ One `profiles/<name>.env` per way to launch a runtime: `RUNTIME`, `MODEL`, `SERV
 - `smoke-toolcall` FAIL with `<tool_call>` text in content: the parser is off or wrong for the model family
 - `bench` SLO FAIL lists which percentile missed; rerun with lower `BENCH_C` to find the concurrency the server sustains
 - Thinking models: `smoke-toolcall` gives each call up to 1024 tokens and names the case where reasoning ate the budget and `content` came back empty; disable thinking for tool calls or add the reasoning parser
+- `doctor` FAIL on a parser name: the engine renamed or dropped it. Take the name from the `not in the table` line or `task flags`, and report the table error with the issue link that `doctor` prints. `doctor` needs the engine in the Python that runs it: activate the engine's venv, otherwise it exits 2
 - Cloud endpoints such as OpenRouter ignore `ignore_eos`, so bench outputs can be shorter than `BENCH_OUT`; TTFT and TPOT stay valid, total tokens/s does not. Pass `BENCH_MODEL` there, otherwise the first model in the provider list is used
 
 ## Sources

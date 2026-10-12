@@ -40,7 +40,7 @@ Then work the table; the full symptom table is in [references/symptoms.md](refer
 
 ## After an upgrade
 
-Broke after a change of engine version, model or template: `task smoke-toolcall` first. A parser or template regression is the most common cause of "the model got dumber" with no change in metrics. Rollback: `task stop` the new profile, `task serve` the old one (profiles are not deleted until they pass the gate).
+Broke after a change of engine version, model or template: `task doctor` first, it checks parser names against the installed engine and runs `smoke-toolcall`. A parser or template regression is the most common cause of "the model got dumber" with no change in metrics. Rollback: `task stop` the new profile, `task serve` the old one (profiles are not deleted until they pass the gate).
 
 ## Operating rules
 
